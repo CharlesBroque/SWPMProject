@@ -15,6 +15,7 @@ class ProjectRisk
         idNumber = id;
         this.probability = probability;
         this.cost = cost;
+        this.status = status;
         UpdateRiskValue();
         this.description = description;
     }
@@ -431,7 +432,7 @@ class Project
         nfRequirements.RemoveAt(index);
         return true;
     }
-    
+
     // save to/load from disk? maybe out of scope
 
 }
