@@ -13,16 +13,67 @@ class ProjectRisk
     {
         idNumber = id;
         this.probability = probability;
-        this.cost = float.Round(cost, 2);
-        riskValue = float.Round(cost * probability, 2);
+        this.cost = cost;
+        UpdateRiskValue();
         this.description = description;
     }
 
     // get/set id
+    public int GetID()
+    {
+        return idNumber;
+    }
+    public void SetID(int id)
+    {
+        idNumber = id;
+    }
     // get/set status
+    public string GetStatus()
+    {
+        return status;
+    }
+    public void SetStatus(string status)
+    {
+        this.status = status;
+    }
     // get/set probability
+    public float GetProbability()
+    {
+        return probability;
+    }
+    public void SetProbability(float probability)
+    {
+        this.probability = probability;
+        UpdateRiskValue();
+    }
     // get/set cost
+    public float GetCost()
+    {
+        return cost;
+    }
+    public void SetCost(float cost)
+    {
+        this.cost = float.Round(cost, 2);
+        UpdateRiskValue();
+    }
+    // get/update riskValue (riskValue should never be set directly)
+    public float GetRiskValue()
+    {
+        return riskValue;
+    }
+    void UpdateRiskValue()
+    {
+        riskValue = float.Round(probability * cost);
+    }
     // get/set description
+    public string GetDescription()
+    {
+        return description;
+    }
+    public void SetDescription(string description)
+    {
+        this.description = description;
+    }
 
     public string ToString()
     {
