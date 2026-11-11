@@ -42,3 +42,6 @@ see comprehensive plan.
 - [ ] Console-based user interface
 - [ ] Testing
 
+<!-- Notes: 
+// some structures and helper functions to make writing the application easier
+// TO DO: method descriptions -->
