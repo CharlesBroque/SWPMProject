@@ -10,7 +10,7 @@ class ProjectRisk
     float riskValue;
     string description;
 
-    public ProjectRisk(int id, float probability, int cost, string status, string description)
+    public ProjectRisk(int id, float probability, float cost, string status, string description)
     {
         idNumber = id;
         this.probability = probability;
@@ -123,6 +123,12 @@ class EffortEntry
     /// <exception cref="ArgumentException"></exception>
     public void SetEffortByCategory(string category_name, int hours)
     {
+        // Checks for negative hour entry.
+        if (hours < 0)
+        {
+            throw new ArgumentException("Hours cannot be negative.", paramName: nameof(hours));
+        }
+        
         if (effortHours.ContainsKey(category_name))
         {
             effortHours[category_name] = hours;
@@ -144,7 +150,7 @@ class EffortEntry
     public bool SetDatestamp(string date_string)
     {
         DateOnly result;
-        bool did_it_work = DateOnly.TryParse(date_string, result);
+        bool did_it_work = DateOnly.TryParse(date_string, out result);
         if (did_it_work)
         {
             datestamp = result;
@@ -209,7 +215,7 @@ class ProjectRequirement
     /// <returns>true if argument was in range, false otherwise.</returns>
     public bool RemoveEntryByIndex(int index)
     {
-        if (effortEntries.Count > index & index >= 0)
+        if (index >= 0 && index < effortEntries.Count)
         {
             effortEntries.RemoveAt(index);
             return true;
@@ -360,6 +366,17 @@ class Project
         ProjectRisk risk = new ProjectRisk(id, probability, cost, status, description);
         risks.Add(risk);
     }
+    // update risk
+    public bool UpdateRiskByID(int id, float? probability = null, float? cost = null, string status = null, string description = null)
+    {
+        ProjectRisk risk = risks.Find(risk => risk.GetID() == id);
+        if (risk == null) return false;
+        if (probability.HasValue) risk.SetProbability(probability.Value);
+        if (cost.HasValue) risk.SetCost(cost.Value);
+        if (status != null) risk.SetStatus(status);
+        if (description != null) risk.SetDescription(description);
+        return true;
+    }
     /// <summary>
     /// Removes a ProjectRisk with the given ID.
     /// </summary>
@@ -412,7 +429,7 @@ class Project
     // add/remove nfrequirement
     public void AddNFRequirement(string desc)
     {
-        id = ++lifetimeNFrequirementCount;
+        int id = ++lifetimeNFrequirementCount;
         ProjectRequirement nfReq = new ProjectRequirement(id, false, desc);
         nfRequirements.Add(nfReq);
     }
