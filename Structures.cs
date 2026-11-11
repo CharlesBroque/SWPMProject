@@ -88,6 +88,7 @@ class EffortEntry
 
     public EffortEntry()
     {
+
         effortHours = new Dictionary<string, int>
         {
             { "Reqs Analysis", 0 },
@@ -116,6 +117,12 @@ class EffortEntry
         throw new ArgumentException("Category_name must be one of: Reqs Analysis, Designing, Coding, Testing, Proj Management, Uncategorized.", paramName: category_name);
     }
     // set value by name
+    /// <summary>
+    /// Sets effort hours by the name of the category. Throws ArgumentException if the category name is not Reqs Analysis, Designing, Coding, Testing, Proj Management, or Uncategorized.
+    /// </summary>
+    /// <param name="category_name"></param>
+    /// <param name="hours"></param>
+    /// <exception cref="ArgumentException"></exception>
     public void SetEffortByCategory(string category_name, int hours)
     {
         if (effortHours.ContainsKey(category_name))
@@ -148,6 +155,8 @@ class EffortEntry
         // else
         return false;
     }
+
+    // public string ToString(); // some kind of readout will eventually be needed
 }
 
 class ProjectRequirement
@@ -155,21 +164,71 @@ class ProjectRequirement
     int idNumber; // id management to be handled by function in Project
     bool isFunctional;
     string description;
-    EffortEntry[] effortEntries;
+    List<EffortEntry> effortEntries;
 
     public ProjectRequirement(int id, bool isfunc, string desc) {
         idNumber = id;
         isFunctional = isfunc;
         description = desc;
-        effortEntries = new EffortEntry[];
+        effortEntries = new List<EffortEntry>();
     }
 
     // get all effort entries
+    public EffortEntry[] GetEffortEntries()
+    {
+        return effortEntries.ToArray();
+    }
     // add effort entry
-    // remove effort entry
-    // get total effort
+    public void AddEffortEntry(int hoursReqsAnalysis, int hoursDesigning, int hoursCoding, int hoursTesting, int hoursProjManagement, int hoursUncategorized)
+    {
+        EffortEntry entry = new EffortEntry();
+        entry.SetEffortByCategory("Reqs Analysis", hoursReqsAnalysis);
+        entry.SetEffortByCategory("Designing", hoursDesigning);
+        entry.SetEffortByCategory("Coding", hoursCoding);
+        entry.SetEffortByCategory("Testing", hoursTesting);
+        entry.SetEffortByCategory("Proj Management", hoursProjManagement);
+        entry.SetEffortByCategory("Uncategorized", hoursUncategorized);
 
-    string ToString()
+        effortEntries.Add(entry);
+    }
+    // remove newest entry
+    public void RemoveNewestEntry()
+    {
+        if (effortEntries.Count > 0) {
+            effortEntries.RemoveAt(effortEntries.Count - 1);
+        }
+    }
+    // remove entry by index
+    /// <summary>
+    /// Removes an entry by its index (0-indexed, please convert if using 1-index).
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns>true if argument was in range, false otherwise.</returns>
+    public bool RemoveEntryByIndex(int index)
+    {
+        if (effortEntries.Count > index & index >= 0)
+        {
+            effortEntries.RemoveAt(index);
+            return true;
+        }
+        return false;
+    }
+    // get total effort dictionary
+    public Dictionary<string, int> totalEffort()
+    {
+        Dictionary<string, int> totals = new EffortEntry().GetEffortHours();
+        foreach (EffortEntry entry in effortEntries)
+        {
+            Dictionary<string, int> hours = entry.GetEffortHours();
+            foreach (KeyValuePair<string, int> kv in hours)
+            {
+                totals[kv.Key] += kv.Value;
+            }
+        }
+        return totals;
+    }
+
+    public string ToString()
     {
         if (isFunctional) {
             return "FR-" + idNumber.ToString() + ": " + description;
