@@ -2,12 +2,12 @@ namespace DefaultNamespace;
 
 public class ProjectRisk
 {
-    int idNumber; // id management to be handled by function in Project
-    string status; // statuses include... what do they include?
-    float probability;
-    float cost;
-    float riskValue;
-    string description;
+    private int idNumber; // id management to be handled by function in Project
+    private string status; // statuses include... what do they include?
+    private float probability;
+    private float cost;
+    private float riskValue;
+    private string description;
 
     public ProjectRisk(int id, float probability, float cost, string status, string description)
     {
@@ -31,6 +31,10 @@ public class ProjectRisk
     }
     public void SetStatus(string status)
     {
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            throw new ArgumentException("Status can't be null or empty.", nameof(status));
+        }
         this.status = status;
     }
     // get/set probability
@@ -69,6 +73,10 @@ public class ProjectRisk
     }
     public void SetDescription(string description)
     {
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            throw new ArgumentException("Description can't be empty.", nameof(description));
+        }
         this.description = description;
     }
 

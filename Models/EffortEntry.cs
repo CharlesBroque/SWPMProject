@@ -7,7 +7,6 @@ public class EffortEntry
 
     public EffortEntry()
     {
-
         effortHours = new Dictionary<string, int>
         {
             { "Reqs Analysis", 0 },
@@ -58,6 +57,10 @@ public class EffortEntry
         // else
         throw new ArgumentException("Category_name must be one of: Reqs Analysis, Designing, Coding, Testing, Proj Management, Uncategorized.", paramName: category_name);
     }
+    
+    // method to update an existing effort entry?
+    // UpdateEffort()
+    
     // get/set datestamp
     public DateOnly GetDatestamp()
     {
