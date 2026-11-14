@@ -23,6 +23,10 @@ The application will allow users to manage project details, team members, projec
 <!-- Note: Specify Structure Here.
 ## Project Structure
 Classes / Responsibilities
+Project - Manages collections/assigns IDs
+ProjectRisk - manages project risk info and validates its inputs
+Project requirement - manages requirement descriptions and (effort entries?)
+EffortEntry - manages activity hours and date
 -->
 
 <!-- Note: Other things to consider adding later.

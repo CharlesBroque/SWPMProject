@@ -73,6 +73,21 @@ public class ProjectRequirement
         }
         return totals;
     }
+    
+    //update effort:
+    
+    // get total no. hours for each requirement:
+    
+    // get description (used to update req. descriptions):
+    public string GetDescription()
+    {
+        return description;
+    }
+
+    public void SetDescription(string description)
+    {
+        this.description = description;
+    }
 
     public string ToString()
     {
