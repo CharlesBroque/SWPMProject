@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace Models;
 
 public class ProjectRisk
 {
@@ -80,7 +80,7 @@ public class ProjectRisk
         this.description = description;
     }
 
-    public string ToString()
+    public override string ToString()
     {
         return "R-" + idNumber.ToString() + "(" + status.ToString() + "): " + description;
     }

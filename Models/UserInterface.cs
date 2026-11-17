@@ -1,5 +1,5 @@
 ﻿
-using DefaultNamespace;
+using Models;
 
 public class UserInterface
 {
@@ -10,7 +10,8 @@ public class UserInterface
         while (true)
         {
             DisplayMenu();
-            int choice = int.Parse(Console.ReadLine());
+            int choice;
+            int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
             switch (choice)
             {
                 case 1:
@@ -58,18 +59,20 @@ public class UserInterface
         PrintProjectInformation(project);
         Console.WriteLine("-------------------------");
         Console.WriteLine("Please select an option to edit project information:");
-        Console.WriteLine("1.Description");
-        Console.WriteLine("2.Project Owner and Manager's name");
-        Console.WriteLine("3.Team Members");
-        Console.WriteLine("4.Project Risks");
+        Console.WriteLine("1. Description");
+        Console.WriteLine("2. Project Owner and Manager's name");
+        Console.WriteLine("3. Team Members");
+        Console.WriteLine("4. Project Risks");
         Console.WriteLine("-------------------------");
-        int choice = int.Parse(Console.ReadLine());
+        int choice;
+        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
 
         switch (choice)
         {
             case 1:
                 Console.WriteLine("You selected option 1: Edit project description, Please enter the new description:");
-                string newDescription = Console.ReadLine();
+                string newDescription = Console.ReadLine() ?? "";
+                
                 project.SetDescription(newDescription);
                 break;
             case 2:
@@ -80,17 +83,19 @@ public class UserInterface
                 Console.WriteLine("2. Remove owner");
                 Console.WriteLine("3. Add manager");
                 Console.WriteLine("4. Remove manager");
-                int subChoice = int.Parse(Console.ReadLine());
+                int subChoice;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice);
+
                 switch (subChoice)
                 {
                     case 1:
                         Console.WriteLine("Enter the name of the owner to add:");
-                        string ownerToAdd = Console.ReadLine();
+                        string ownerToAdd = Console.ReadLine() ?? "No Name";
                         project.AddOwner(ownerToAdd);
                         break;
                     case 2:
                         Console.WriteLine("Enter the name of the owner to remove:");
-                        string ownerToRemove = Console.ReadLine();
+                        string ownerToRemove = Console.ReadLine() ?? "No Name";
                         if (project.RemoveOwner(ownerToRemove))
                         {
                             Console.WriteLine($"Owner '{ownerToRemove}' removed successfully.");
@@ -102,12 +107,12 @@ public class UserInterface
                         break;
                     case 3:
                         Console.WriteLine("Enter the name of the manager to add:");
-                        string managerToAdd = Console.ReadLine();
+                        string managerToAdd = Console.ReadLine() ?? "No Name";
                         project.AddManager(managerToAdd);
                         break;
                     case 4:
                         Console.WriteLine("Enter the name of the manager to remove:");
-                        string managerToRemove = Console.ReadLine();
+                        string managerToRemove = Console.ReadLine() ?? "No Name";
                         if (project.RemoveManager(managerToRemove))
                         {
                             Console.WriteLine($"Manager '{managerToRemove}' removed successfully.");
@@ -128,17 +133,19 @@ public class UserInterface
                 PrintNames("Current team members", project.GetMembers());
                 Console.WriteLine("1. Add team member");
                 Console.WriteLine("2. Remove team member");         
-                int subChoice2 = int.Parse(Console.ReadLine());
+                int subChoice2;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice2);
+
                 switch (subChoice2)
                 {
                     case 1:
                         Console.WriteLine("Enter the name of the team member to add:");
-                        string memberToAdd = Console.ReadLine();
+                        string memberToAdd = Console.ReadLine() ?? "No Name";
                         project.AddMember(memberToAdd);
                         break;
                     case 2:
                         Console.WriteLine("Enter the name of the team member to remove:");
-                        string memberToRemove = Console.ReadLine();
+                        string memberToRemove = Console.ReadLine() ?? "No Name";
                         if (project.RemoveMember(memberToRemove))
                         {
                             Console.WriteLine($"Team member '{memberToRemove}' removed successfully.");
@@ -163,37 +170,41 @@ public class UserInterface
                 Console.WriteLine("1. Add risk");
                 Console.WriteLine("2. Edit risk");
                 Console.WriteLine("3. Remove risk");
-                int subChoice3 = int.Parse(Console.ReadLine());
+                int subChoice3;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice3);
+
                 int id;
                 switch (subChoice3)
                 {
                     case 1:
                         Console.WriteLine("Enter the probability of the risk (0 to 1):");
-                        float probability = float.Parse(Console.ReadLine());
+                        float probability;
+                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
                         Console.WriteLine("Enter the cost of the risk:");
-                        float cost = float.Parse(Console.ReadLine());
+                        float cost;
+                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
                         Console.WriteLine("Enter the status of the risk:");
-                        string status = Console.ReadLine();
+                        string status = Console.ReadLine() ?? "TBD";
                         Console.WriteLine("Enter the description of the risk:");
-                        string description = Console.ReadLine();
+                        string description = Console.ReadLine() ?? "No description.";
                         project.AddRisk(probability, cost, status, description);
                         break;
                     case 2:
                         Console.WriteLine("Enter the ID of the risk to edit:");
-                        id = int.Parse(Console.ReadLine());
+                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
                         Console.WriteLine("Enter the new probability of the risk (0 to 1):");
-                        probability = float.Parse(Console.ReadLine());
+                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
                         Console.WriteLine("Enter the new cost of the risk:");
-                        cost = float.Parse(Console.ReadLine());
+                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
                         Console.WriteLine("Enter the new status of the risk:");
-                        status = Console.ReadLine();
+                        status = Console.ReadLine() ?? "TBD";
                         Console.WriteLine("Enter the new description of the risk:");
-                        description = Console.ReadLine();
+                        description = Console.ReadLine() ?? "No description.";
                         project.UpdateRiskByID(id, probability, cost, status, description);
                         break;
                     case 3:
                         Console.WriteLine("Enter the ID of the risk to remove:");
-                        id = int.Parse(Console.ReadLine());
+                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
                         project.RemoveRiskByID(id);
                         break;
                 }

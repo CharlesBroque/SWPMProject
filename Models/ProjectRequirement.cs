@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace Models;
 
 public class ProjectRequirement
 {
@@ -89,7 +89,7 @@ public class ProjectRequirement
         this.description = description;
     }
 
-    public string ToString()
+    public override string ToString()
     {
         if (isFunctional) {
             return "FR-" + idNumber.ToString() + ": " + description;

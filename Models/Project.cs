@@ -1,4 +1,4 @@
-namespace DefaultNamespace;
+namespace Models;
 
 /// <summary>
 /// Project Class: manages the information/data colllection for a project
@@ -228,7 +228,7 @@ public class Project
     /// </summary>
     public bool UpdateRiskByID(int id, float? probability = null, float? cost = null, string? status = null, string? description = null)
     {
-        ProjectRisk risk = risks.Find(risk => risk.GetID() == id);
+        ProjectRisk? risk = risks.Find(risk => risk.GetID() == id);
         if (risk == null) return false;
         
         if (probability.HasValue) risk.SetProbability(probability.Value);
@@ -282,7 +282,7 @@ public class Project
     /// </summary>
     public bool UpdateFRequirementByID(int id, string description)
     {
-        ProjectRequirement requirement = fRequirements.Find(req => req.GetID() == id);
+        ProjectRequirement? requirement = fRequirements.Find(req => req.GetID() == id);
         
         if (requirement == null)  return false;
         
@@ -333,7 +333,7 @@ public class Project
     /// </summary>
     public bool UpdateNFRequirementByID(int id, string description)
     {
-        ProjectRequirement requirement = nfRequirements.Find(req => req.GetID() == id);
+        ProjectRequirement? requirement = nfRequirements.Find(req => req.GetID() == id);
         
         if (requirement == null) return false;
         
