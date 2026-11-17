@@ -367,7 +367,34 @@ public class Project
         return true;
     }
 
-    // Project wide effort calculations here: 
+    /// <summary>
+    /// GetProjectEffortTotals: Gets the total effort hours across all functional and non-functional
+    /// requirements.
+    /// </summary>
+    /// <returns>A dictionary with the total hours for each effort catrgory.</returns>
+    public Dictionary<string, int> GetProjectEffortTotals()
+    {
+        Dictionary<string, int> totals = new EffortEntry().GetEffortHours(); 
+        // functional req.
+        foreach (ProjectRequirement req in fRequirements)
+        {
+            Dictionary<string, int> reqTotals = req.totalEffort();
+            foreach (KeyValuePair<string, int> entry in reqTotals)
+            {
+                totals[entry.Key] += entry.Value;
+            }
+        }
+        // non-functional req.
+        foreach (ProjectRequirement req in nfRequirements)
+        {
+            Dictionary<string, int> reqTotals = req.totalEffort();
+            foreach (KeyValuePair<string, int> entry in reqTotals)
+            {
+                totals[entry.Key] += entry.Value;
+            }
+        }
+        return totals;
+    }
     
     // save to/load from disk? maybe out of scope
 }
