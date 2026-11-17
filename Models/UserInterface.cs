@@ -236,7 +236,8 @@ public class UserInterface
         Console.WriteLine("Please select an option from the menu below:");
         Console.WriteLine("1. NonFunctional requirements");
         Console.WriteLine("2. Functional requirements");
-        int choice2 = int.Parse(Console.ReadLine() ?? "0");
+        int choice2;
+        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice2);
 
         switch (choice2)
         {
@@ -248,7 +249,8 @@ public class UserInterface
                 Console.WriteLine("2. Update a project requirement");
                 Console.WriteLine("3. Remove a project requirement");
                 Console.WriteLine("-------------------------");
-                int choice = int.Parse(Console.ReadLine() ?? "0");
+                int choice;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
                 switch (choice)
     {
                     case 1:
@@ -262,7 +264,8 @@ public class UserInterface
                         break;
                     case 3:
                         Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
-                        int temp_id = int.Parse(Console.ReadLine() ?? "0");
+                        int temp_id;
+                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out temp_id);
                         if (project.RemoveNFRequirementByID(temp_id))
                         {
                             Console.WriteLine($"Successfully removed NFR-{temp_id}.");
@@ -285,7 +288,8 @@ public class UserInterface
                 Console.WriteLine("2. Update a project requirement");
                 Console.WriteLine("3. Remove a project requirement");
                 Console.WriteLine("-------------------------");
-                int choice3 = int.Parse(Console.ReadLine() ?? "0");
+                int choice3;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice3);
                 switch (choice3)
                 {
                     case 1:
@@ -299,7 +303,8 @@ public class UserInterface
                         break;
                     case 3:
                         Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
-                        int temp_id = int.Parse(Console.ReadLine() ?? "0");
+                        int temp_id;
+                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out temp_id);
                         if (project.RemoveFRequirementByID(temp_id))
                         {
                             Console.WriteLine($"Successfully removed FR-{temp_id}.");
@@ -329,7 +334,8 @@ public class UserInterface
         Console.WriteLine("2. View effort totals for each requirement");
         Console.WriteLine("3. View project-wide effort totals");
         Console.WriteLine("-------------------------");
-        int choice = int.Parse(Console.ReadLine() ?? "0");
+        int choice;
+        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
 
         switch (choice)
         {
@@ -337,7 +343,8 @@ public class UserInterface
                 Console.WriteLine("You selected option 1: Log person-hours for a requirement");
                 Console.WriteLine("1. Functional requirement");
                 Console.WriteLine("2. Nonfunctional requirement");
-                int typeChoice = int.Parse(Console.ReadLine() ?? "0");
+                int typeChoice;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out typeChoice);
                 List<ProjectRequirement> requirements;
                 if (typeChoice == 1)
                 {
@@ -352,7 +359,8 @@ public class UserInterface
                     Console.WriteLine("  " + req.ToString());
                 }
                 Console.WriteLine("Enter the ID of the requirement:");
-                int id = int.Parse(Console.ReadLine() ?? "0");
+                int id;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
                 ProjectRequirement? requirement = requirements.Find(r => r.GetID() == id);
                 if (requirement == null)
                 {
@@ -362,16 +370,23 @@ public class UserInterface
 
                 Console.WriteLine("Enter the date of the work (yyyy-mm-dd). For a weekly entry, enter the first day of the week:");
                 string date = Console.ReadLine() ?? DateTime.Today.ToShortDateString();
+                // validate date
+
                 Console.WriteLine("Enter hours for Requirements Analysis:");
-                int hoursReqsAnalysis = int.Parse(Console.ReadLine() ?? "0");
+                int hoursReqsAnalysis;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursReqsAnalysis);
                 Console.WriteLine("Enter hours for Designing:");
-                int hoursDesigning = int.Parse(Console.ReadLine() ?? "0");
+                int hoursDesigning;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursDesigning);
                 Console.WriteLine("Enter hours for Coding:");
-                int hoursCoding = int.Parse(Console.ReadLine() ?? "0");
+                int hoursCoding;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursCoding);
                 Console.WriteLine("Enter hours for Testing:");
-                int hoursTesting = int.Parse(Console.ReadLine() ?? "0");
+                int hoursTesting;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursTesting);
                 Console.WriteLine("Enter hours for Project Management:");
-                int hoursProjManagement = int.Parse(Console.ReadLine() ?? "0");
+                int hoursProjManagement;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursProjManagement);
 
                 requirement.AddEffortEntry(hoursReqsAnalysis, hoursDesigning, hoursCoding, hoursTesting, hoursProjManagement, 0);
                 // AddEffortEntry uses today's date, so set the date on the newest entry
