@@ -222,14 +222,24 @@ public class Project
         lifetimeRiskCount = id;
         return id;
     }
+
+    /// <summary>
+    /// Finds the risk with the given ID. Can be null, so watch out!
+    /// </summary>
+    /// <returns>The risk with the given ID if it exists, otherwise null.</returns>
+    public ProjectRisk? GetRiskByID(int id)
+    {
+        ProjectRisk? risk = risks.Find(risk => risk.GetID() == id);
+        return risk;
+    }
     
     /// <summary>
-    /// UpdateRisByID: Updates a risk using its ID no.
+    /// UpdateRiskByID: Updates a risk using its ID no.
     /// </summary>
     public bool UpdateRiskByID(int id, float? probability = null, float? cost = null, string? status = null, string? description = null)
     {
-        ProjectRisk? risk = risks.Find(risk => risk.GetID() == id);
-        if (risk == null) return false;
+        ProjectRisk? risk = GetRiskByID(id);
+        if (risk == null) return false; 
         
         if (probability.HasValue) risk.SetProbability(probability.Value);
         if (cost.HasValue) risk.SetCost(cost.Value);

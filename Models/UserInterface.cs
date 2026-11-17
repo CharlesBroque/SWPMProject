@@ -15,7 +15,7 @@ public class UserInterface
             switch (choice)
             {
                 case 1:
-                    Console.WriteLine("You selected option 1: Edit a project information");
+                    Console.WriteLine("You selected option 1: Edit project information");
                     EditProjectInformation(project);
                     break;
                 case 2:
@@ -177,6 +177,7 @@ public class UserInterface
                 switch (subChoice3)
                 {
                     case 1:
+                        // add risk
                         Console.WriteLine("Enter the probability of the risk (0 to 1):");
                         float probability;
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
@@ -190,8 +191,17 @@ public class UserInterface
                         project.AddRisk(probability, cost, status, description);
                         break;
                     case 2:
+                        // edit risk
                         Console.WriteLine("Enter the ID of the risk to edit:");
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
+
+                        ProjectRisk? risk = project.GetRiskByID(id);
+                        if (risk == null)
+                        {
+                            Console.WriteLine($"No such risk with ID {id}.");
+                            break;
+                        }
+
                         Console.WriteLine("Enter the new probability of the risk (0 to 1):");
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
                         Console.WriteLine("Enter the new cost of the risk:");
@@ -203,9 +213,17 @@ public class UserInterface
                         project.UpdateRiskByID(id, probability, cost, status, description);
                         break;
                     case 3:
+                        // remove risk
                         Console.WriteLine("Enter the ID of the risk to remove:");
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
-                        project.RemoveRiskByID(id);
+                        if (project.RemoveRiskByID(id))
+                        {
+                            Console.WriteLine($"Risk R-{id} removed.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"No such risk with ID {id}.");
+                        }
                         break;
                 }
                 break;
