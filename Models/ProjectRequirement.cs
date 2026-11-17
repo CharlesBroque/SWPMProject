@@ -1,33 +1,59 @@
 namespace Models;
 
+/// <summary>
+/// ProjectRequirement Class: manages an individual functional / non-functional project requirement
+/// and its associated effort entries.
+/// </summary>
 public class ProjectRequirement
 {
-    int idNumber; // id management to be handled by function in Project
-    bool isFunctional;
-    string description;
-    List<EffortEntry> effortEntries;
+    private int idNumber; // id management to be handled by function in Project
+    private bool isFunctional;
+    private string description;
+    private List<EffortEntry> effortEntries;
 
+    /// <summary>
+    /// ProjectRequirement Constructor: Initializes a new project requirement.
+    /// </summary>
+    /// <param name="id">The assigned requirement ID.</param>
+    /// <param name="isfunc">Indicates whether the requirement is functional or non-functional</param>
+    /// <param name="desc">The requirement description.</param>
     public ProjectRequirement(int id, bool isfunc, string desc) {
-        idNumber = id;
-        isFunctional = isfunc;
-        description = desc;
-        effortEntries = new List<EffortEntry>();
+        this.idNumber = id;
+        this.isFunctional = isfunc;
+        this.description = desc;
+        this.effortEntries = new List<EffortEntry>();
     }
 
-    // get ID
+    /// <summary>
+    /// GetID: Gets the requirement ID.
+    /// </summary>
     public int GetID()
     {
         return idNumber;
     }
-    // get all effort entries
+    
+    /// <summary>
+    /// GetEffortEntries: Gets all effort entries associated with the requirement.
+    /// </summary>
+    /// <returns>An array of the requirement's effort entries</returns>
     public EffortEntry[] GetEffortEntries()
     {
         return effortEntries.ToArray();
     }
-    // add effort entry
+    
+    /// <summary>
+    /// AddEffortEntry: Creates and adds a new effort entry for the requirement. 
+    /// </summary>
+    /// <param name="hoursReqsAnalysis">Hours spent on requirements analysis.</param>
+    /// <param name="hoursDesigning">Hours spent designing.</param>
+    /// <param name="hoursCoding">Hours spent coding.</param>
+    /// <param name="hoursTesting">Hours spent testing.</param>
+    /// <param name="hoursProjManagement">Hours spent on project management.</param>
+    /// <param name="hoursUncategorized">Hours spent on other tasks.</param>
     public void AddEffortEntry(int hoursReqsAnalysis, int hoursDesigning, int hoursCoding, int hoursTesting, int hoursProjManagement, int hoursUncategorized)
     {
         EffortEntry entry = new EffortEntry();
+        
         entry.SetEffortByCategory("Reqs Analysis", hoursReqsAnalysis);
         entry.SetEffortByCategory("Designing", hoursDesigning);
         entry.SetEffortByCategory("Coding", hoursCoding);
@@ -37,19 +63,23 @@ public class ProjectRequirement
 
         effortEntries.Add(entry);
     }
-    // remove newest entry
+    
+    /// <summary>
+    /// RemoveNewestEntry: Removes the most recently added effort entry.
+    /// </summary>
     public void RemoveNewestEntry()
     {
-        if (effortEntries.Count > 0) {
+        if (effortEntries.Count > 0) 
+        {
             effortEntries.RemoveAt(effortEntries.Count - 1);
         }
     }
-    // remove entry by index
+    
     /// <summary>
-    /// Removes an entry by its index (0-indexed, please convert if using 1-index).
+    /// RemoveEntryByIndex: Removes an entry by its index (0-indexed, please convert if using 1-index).
     /// </summary>
-    /// <param name="index"></param>
-    /// <returns>true if argument was in range, false otherwise.</returns>
+    /// <param name="index">The zero-based index of the entry to remove.</param>
+    /// <returns>True if argument was in range, false otherwise.</returns>
     public bool RemoveEntryByIndex(int index)
     {
         if (index >= 0 && index < effortEntries.Count)
@@ -59,7 +89,11 @@ public class ProjectRequirement
         }
         return false;
     }
-    // get total effort dictionary
+    
+    /// <summary>
+    /// totalEffort: Calculates the total hours recorded  in each effort category
+    /// </summary>
+    /// <returns>A dictionary containing the total hrs for each category.</returns>
     public Dictionary<string, int> totalEffort()
     {
         Dictionary<string, int> totals = new EffortEntry().GetEffortHours();
@@ -78,23 +112,31 @@ public class ProjectRequirement
     
     // get total no. hours for each requirement:
     
-    // get description (used to update req. descriptions):
+    /// <summary>
+    /// GetDescription: Gets the requirement description.
+    /// </summary>
     public string GetDescription()
     {
         return description;
     }
 
+    /// <summary>
+    /// SetDescription: Updates the requirement description.
+    /// </summary>
+    /// <param name="description">The new requirement description.</param>
     public void SetDescription(string description)
     {
         this.description = description;
     }
 
+    /// <summary>
+    /// ToString: Returns a formatted representation of the requirement.
+    /// </summary>
     public override string ToString()
     {
         if (isFunctional) {
             return "FR-" + idNumber.ToString() + ": " + description;
-        }
-        // else
+        } // else
         return "NFR-" + idNumber.ToString() + ": " + description;
     }
 }

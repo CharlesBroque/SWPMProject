@@ -1,10 +1,18 @@
 namespace Models;
 
+/// <summary>
+/// EffortEntry Class: manages the hours recorded for a project requirement across diff. work categories
+/// and an associated date.
+/// </summary>
 public class EffortEntry
 {
-    Dictionary<string, int> effortHours;
-    DateOnly datestamp;
+    private Dictionary<string, int> effortHours;
+    private DateOnly datestamp;
 
+    /// <summary>
+    /// EffortEntry Constructor: Initializes a new effort entry with zero hours in each category
+    /// and the current date.
+    /// </summary>
     public EffortEntry()
     {
         effortHours = new Dictionary<string, int>
@@ -19,12 +27,21 @@ public class EffortEntry
         datestamp = DateOnly.FromDateTime(DateTime.Now);
     }
 
-    // get all values
+    /// <summary>
+    /// GetEffortHours: Gets the hours recorded for all categories.
+    /// </summary>
+    /// <returns>A dictionary containing the hours for each category.</returns>
     public Dictionary<string, int> GetEffortHours()
     {
         return effortHours;
     }
-    // get value by name
+    
+    /// <summary>
+    /// GetEffortByCategory: Gets the recorded hours for a specific category.
+    /// </summary>
+    /// <param name="category_name">Effort category name.</param>
+    /// <returns>The number of hours recorded for that category.</returns>
+    /// <exception cref="ArgumentException">Thrown if category name is invalid.</exception>
     public int GetEffortByCategory(string category_name)
     {
         if (effortHours.ContainsKey(category_name))
@@ -34,13 +51,14 @@ public class EffortEntry
         // else
         throw new ArgumentException("Category_name must be one of: Reqs Analysis, Designing, Coding, Testing, Proj Management, Uncategorized.", paramName: category_name);
     }
-    // set value by name
+    
     /// <summary>
-    /// Sets effort hours by the name of the category. Throws ArgumentException if the category name is not Reqs Analysis, Designing, Coding, Testing, Proj Management, or Uncategorized.
+    /// SetEffortByCategory: Sets recorded effort hours by the name of the category.
+    /// Throws ArgumentException if the category name is not Reqs Analysis, Designing, Coding, Testing, Proj Management, or Uncategorized.
     /// </summary>
-    /// <param name="category_name"></param>
-    /// <param name="hours"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="category_name">The name of the effort category.</param>
+    /// <param name="hours">The number of hours to record.</param>
+    /// <exception cref="ArgumentException">Thrown if category name is invalid or hours are negative.</exception>
     public void SetEffortByCategory(string category_name, int hours)
     {
         // Checks for negative hour entry.
@@ -61,16 +79,20 @@ public class EffortEntry
     // method to update an existing effort entry?
     // UpdateEffort()
     
-    // get/set datestamp
+    /// <summary>
+    /// GetDatestamp: Gets the date associated with the effort entry.
+    /// </summary>
     public DateOnly GetDatestamp()
     {
         return datestamp;
     }
+    
     /// <summary>
-    /// Sets the datestamp. Internal use of DateOnly.TryParse means recognition is fuzzy--a variety of formats should work.
+    /// SetDatestamp: Sets the datestamp.
+    /// Internal use of DateOnly.TryParse means recognition is fuzzy--a variety of formats should work.
     /// </summary>
     /// <param name="date_string">String indicating the date.</param>
-    /// <returns>true if the datestamp was set successfully and false if it failed to parse.</returns>
+    /// <returns>True if the datestamp was set successfully parsed and updated, otherwise false..</returns>
     public bool SetDatestamp(string date_string)
     {
         DateOnly result;
