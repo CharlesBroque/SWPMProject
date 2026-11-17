@@ -24,7 +24,7 @@ public class UserInterface
                     break;
                 case 3:
                     Console.WriteLine("You selected option 3: View project effort and progress");
-                    editProjectEffortAndProgress(Project project);
+                    editProjectEffortAndProgress(project);
                     break;
                 case 4:
                     Console.WriteLine("You selected option 4: Quit");
@@ -236,7 +236,7 @@ public class UserInterface
         Console.WriteLine("Please select an option from the menu below:");
         Console.WriteLine("1. NonFunctional requirements");
         Console.WriteLine("2. Functional requirements");
-        int choice2 = int.Parse(Console.ReadLine());
+        int choice2 = int.Parse(Console.ReadLine() ?? "0");
 
         switch (choice2)
         {
@@ -248,12 +248,12 @@ public class UserInterface
                 Console.WriteLine("2. Update a project requirement");
                 Console.WriteLine("3. Remove a project requirement");
                 Console.WriteLine("-------------------------");
-                int choice = int.Parse(Console.ReadLine());
+                int choice = int.Parse(Console.ReadLine() ?? "0");
                 switch (choice)
     {
                     case 1:
                         Console.WriteLine("You selected option 1: Add a project requirement:");
-                        string newRequirementDescription = Console.ReadLine();
+                        string newRequirementDescription = Console.ReadLine() ?? "No description.";
                         project.AddNFRequirement(newRequirementDescription);
                         break;
                     case 2:
@@ -262,7 +262,15 @@ public class UserInterface
                         break;
                     case 3:
                         Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
-                        project.RemoveNFRequirementByID(int.Parse(Console.ReadLine()));
+                        int temp_id = int.Parse(Console.ReadLine() ?? "0");
+                        if (project.RemoveNFRequirementByID(temp_id))
+                        {
+                            Console.WriteLine($"Successfully removed NFR-{temp_id}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Removal failed: no such requirement NFR-{temp_id}.");
+                        }
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Please select a valid option.");
@@ -277,12 +285,12 @@ public class UserInterface
                 Console.WriteLine("2. Update a project requirement");
                 Console.WriteLine("3. Remove a project requirement");
                 Console.WriteLine("-------------------------");
-                int choice3 = int.Parse(Console.ReadLine());
+                int choice3 = int.Parse(Console.ReadLine() ?? "0");
                 switch (choice3)
                 {
                     case 1:
                         Console.WriteLine("You selected option 1: Add a project requirement:");
-                        string newRequirementDescription = Console.ReadLine();
+                        string newRequirementDescription = Console.ReadLine() ?? "No description.";
                         project.AddFRequirement(newRequirementDescription);
                         break;
                     case 2:
@@ -291,7 +299,15 @@ public class UserInterface
                         break;
                     case 3:
                         Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
-                        project.RemoveFRequirementByID(int.Parse(Console.ReadLine()));
+                        int temp_id = int.Parse(Console.ReadLine() ?? "0");
+                        if (project.RemoveFRequirementByID(temp_id))
+                        {
+                            Console.WriteLine($"Successfully removed FR-{temp_id}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Removal failed: no such requirement FR-{temp_id}.");
+                        }
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Please select a valid option.");
@@ -313,7 +329,7 @@ public class UserInterface
         Console.WriteLine("2. View effort totals for each requirement");
         Console.WriteLine("3. View project-wide effort totals");
         Console.WriteLine("-------------------------");
-        int choice = int.Parse(Console.ReadLine());
+        int choice = int.Parse(Console.ReadLine() ?? "0");
 
         switch (choice)
         {
@@ -321,7 +337,7 @@ public class UserInterface
                 Console.WriteLine("You selected option 1: Log person-hours for a requirement");
                 Console.WriteLine("1. Functional requirement");
                 Console.WriteLine("2. Nonfunctional requirement");
-                int typeChoice = int.Parse(Console.ReadLine());
+                int typeChoice = int.Parse(Console.ReadLine() ?? "0");
                 List<ProjectRequirement> requirements;
                 if (typeChoice == 1)
                 {
@@ -336,8 +352,8 @@ public class UserInterface
                     Console.WriteLine("  " + req.ToString());
                 }
                 Console.WriteLine("Enter the ID of the requirement:");
-                int id = int.Parse(Console.ReadLine());
-                ProjectRequirement requirement = requirements.Find(r => r.GetID() == id);
+                int id = int.Parse(Console.ReadLine() ?? "0");
+                ProjectRequirement? requirement = requirements.Find(r => r.GetID() == id);
                 if (requirement == null)
                 {
                     Console.WriteLine("Requirement not found.");
@@ -345,17 +361,17 @@ public class UserInterface
                 }
 
                 Console.WriteLine("Enter the date of the work (yyyy-mm-dd). For a weekly entry, enter the first day of the week:");
-                string date = Console.ReadLine();
+                string date = Console.ReadLine() ?? DateTime.Today.ToShortDateString();
                 Console.WriteLine("Enter hours for Requirements Analysis:");
-                int hoursReqsAnalysis = int.Parse(Console.ReadLine());
+                int hoursReqsAnalysis = int.Parse(Console.ReadLine() ?? "0");
                 Console.WriteLine("Enter hours for Designing:");
-                int hoursDesigning = int.Parse(Console.ReadLine());
+                int hoursDesigning = int.Parse(Console.ReadLine() ?? "0");
                 Console.WriteLine("Enter hours for Coding:");
-                int hoursCoding = int.Parse(Console.ReadLine());
+                int hoursCoding = int.Parse(Console.ReadLine() ?? "0");
                 Console.WriteLine("Enter hours for Testing:");
-                int hoursTesting = int.Parse(Console.ReadLine());
+                int hoursTesting = int.Parse(Console.ReadLine() ?? "0");
                 Console.WriteLine("Enter hours for Project Management:");
-                int hoursProjManagement = int.Parse(Console.ReadLine());
+                int hoursProjManagement = int.Parse(Console.ReadLine() ?? "0");
 
                 requirement.AddEffortEntry(hoursReqsAnalysis, hoursDesigning, hoursCoding, hoursTesting, hoursProjManagement, 0);
                 // AddEffortEntry uses today's date, so set the date on the newest entry
