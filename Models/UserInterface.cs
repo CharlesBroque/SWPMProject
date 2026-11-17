@@ -20,7 +20,7 @@ public class UserInterface
                     break;
                 case 2:
                     Console.WriteLine("You selected option 2: Edit project requirements");
-                    // Call the method to edit project requirements here
+                    EditProjectRequirements(project);
                     break;
                 case 3:
                     Console.WriteLine("You selected option 3: View project effort and progress");
@@ -37,10 +37,6 @@ public class UserInterface
         }
         
     }
-
-
-
-
 
     public static void DisplayMenu()
     {
@@ -233,7 +229,82 @@ public class UserInterface
         }
     }
 
+    public static void EditProjectRequirements(Project project)
+    {
+        Console.WriteLine("-------------------------");
+        PrintProjectInformation(project);
+        Console.WriteLine("Please select an option from the menu below:");
+        Console.WriteLine("1. NonFunctional requirements");
+        Console.WriteLine("2. Functional requirements");
+        int choice2 = int.Parse(Console.ReadLine());
 
+        switch (choice2)
+        {
+            case 1:
+                Console.WriteLine("You selected option 1: Edit nonfunctional requirements");
+                Console.WriteLine("-------------------------");
+                Console.WriteLine("Please select an option from the menu below:");
+                Console.WriteLine("1. Add a project requirement");
+                Console.WriteLine("2. Update a project requirement");
+                Console.WriteLine("3. Remove a project requirement");
+                Console.WriteLine("-------------------------");
+                int choice = int.Parse(Console.ReadLine());
+                switch (choice)
+    {
+                    case 1:
+                        Console.WriteLine("You selected option 1: Add a project requirement:");
+                        string newRequirementDescription = Console.ReadLine();
+                        project.AddNFRequirement(newRequirementDescription);
+                        break;
+                    case 2:
+                        Console.WriteLine("You selected option 2: Update a project requirement");
+                        // Call the method to update a project requirement here
+                        break;
+                    case 3:
+                        Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
+                        project.RemoveNFRequirementByID(int.Parse(Console.ReadLine()));
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select a valid option.");
+                        break;
+    }
+                break;
+            case 2:
+                Console.WriteLine("You selected option 2: Edit functional requirements");
+                Console.WriteLine("-------------------------");
+                Console.WriteLine("Please select an option from the menu below:");
+                Console.WriteLine("1. Add a project requirement");
+                Console.WriteLine("2. Update a project requirement");
+                Console.WriteLine("3. Remove a project requirement");
+                Console.WriteLine("-------------------------");
+                int choice3 = int.Parse(Console.ReadLine());
+                switch (choice3)
+                {
+                    case 1:
+                        Console.WriteLine("You selected option 1: Add a project requirement:");
+                        string newRequirementDescription = Console.ReadLine();
+                        project.AddFRequirement(newRequirementDescription);
+                        break;
+                    case 2:
+                        Console.WriteLine("You selected option 2: Update a project requirement");
+                        // Call the method to update a project requirement here
+                        break;
+                    case 3:
+                        Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
+                        project.RemoveFRequirementByID(int.Parse(Console.ReadLine()));
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please select a valid option.");
+                        break;
+
+                }
+                break;
+            default:
+                Console.WriteLine("Invalid choice. Please select a valid option.");
+                break;
+        }
+
+    }
     private static void PrintNames(string label, List<string> names)
     {
         if (names.Count == 0)
