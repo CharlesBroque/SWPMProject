@@ -10,6 +10,7 @@ public class ProjectRequirement
     private bool isFunctional;
     private string description;
     private List<EffortEntry> effortEntries;
+    private Dictionary<string, int> estimatedEffortHours;
 
     /// <summary>
     /// ProjectRequirement Constructor: Initializes a new project requirement.
@@ -22,6 +23,7 @@ public class ProjectRequirement
         this.isFunctional = isfunc;
         this.description = desc;
         this.effortEntries = new List<EffortEntry>();
+		estimatedEffortHours = new Dictionary<string, int>(new EffortEntry().GetEffortHours());
     }
 
     /// <summary>
@@ -128,6 +130,49 @@ public class ProjectRequirement
     {
         this.description = description;
     }
+
+    /// <summary>
+    /// SetEstimatedEffort: Sets the estimated effort hours for a specified effort category.
+    /// </summary>
+    public void SetEstimatedEffortByCategory(string categoryName, int hours)
+    {
+        if (hours < 0)
+        {
+            throw new ArgumentException("Estimated effort cannot be negative.", nameof(hours));
+        }
+
+        if (!estimatedEffortHours.ContainsKey(categoryName))
+        {
+            throw new ArgumentException("Invalid effort category.", nameof(categoryName));
+        }
+        estimatedEffortHours[categoryName] = hours;
+    }
+
+    /// <summary>
+    /// GetEstimatedEffortHours: Gets the estimated effort hours for every effort category.
+    /// </summary>
+    /// <returns></returns>
+    public Dictionary<string, int> GetEstimatedEffortHours()
+    {
+        return new Dictionary<string, int>(estimatedEffortHours);
+    }
+    
+	/// <summary>
+	/// GetEffortDifference: Calculates the difference between actual effort and estimated effort for each category.
+	/// (actual - estimated)
+	/// </summary>
+	/// <returns>A dictionary of effort differences by category.</returns>
+	public Dictionary<string, int> GetEffortDifference() 
+	{
+		Dictionary<string, int> actualTotals = totalEffort();
+		Dictionary<string, int> difference = new Dictionary<string, int>();
+
+		foreach (KeyValuePair<string, int> estimate in estimatedEffortHours) 
+		{
+			variance[estimate.Key] = actualTotals[estimate.Key] - estimate.Value;
+		}
+		return difference;
+	}
 
     /// <summary>
     /// ToString: Returns a formatted representation of the requirement.
