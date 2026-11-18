@@ -22,6 +22,7 @@ The application will allow users to manage project details, team members, projec
 
 <!-- Note: Specify Structure Here.
 ## Project Structure
+Models:
 Classes / Responsibilities
 Project - Manages collections/assigns IDs
 ProjectRisk - manages project risk info and validates its inputs

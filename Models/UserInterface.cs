@@ -1,5 +1,4 @@
-﻿
-using Models;
+﻿using Models;
 
 public class UserInterface
 {
