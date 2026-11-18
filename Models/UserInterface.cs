@@ -370,7 +370,13 @@ public class UserInterface
 
                 Console.WriteLine("Enter the date of the work (yyyy-mm-dd). For a weekly entry, enter the first day of the week:");
                 string date = Console.ReadLine() ?? DateTime.Today.ToShortDateString();
-                // validate date
+                
+                // validate date here instead of at the end
+                if (!DateOnly.TryParse(date, out _))
+                {
+                    Console.WriteLine("Invalid date. Effort entry was not added.");
+                    break;
+                }
 
                 Console.WriteLine("Enter hours for Requirements Analysis:");
                 int hoursReqsAnalysis;
@@ -387,8 +393,12 @@ public class UserInterface
                 Console.WriteLine("Enter hours for Project Management:");
                 int hoursProjManagement;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursProjManagement);
+                Console.WriteLine("Enter hours for Uncategorized effort:");
+                int hoursUncategorized;
+                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursUncategorized);
 
-                requirement.AddEffortEntry(hoursReqsAnalysis, hoursDesigning, hoursCoding, hoursTesting, hoursProjManagement, 0);
+                requirement.AddEffortEntry(hoursReqsAnalysis, hoursDesigning, hoursCoding, hoursTesting, hoursProjManagement, hoursUncategorized);
+
                 // AddEffortEntry uses today's date, so set the date on the newest entry
                 EffortEntry[] entries = requirement.GetEffortEntries();
                 bool did_it_work = entries[entries.Length - 1].SetDatestamp(date);
@@ -402,6 +412,7 @@ public class UserInterface
                     Console.WriteLine("Invalid date. Effort entry was not added.");
                 }
                 break;
+                
             case 2:
                 Console.WriteLine("You selected option 2: View effort totals for each requirement");
                 Console.WriteLine("Functional requirements:");
