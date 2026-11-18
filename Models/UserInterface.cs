@@ -59,6 +59,7 @@ public class UserInterface
         Console.WriteLine("2. Project Owner and Manager's name");
         Console.WriteLine("3. Team Members");
         Console.WriteLine("4. Project Risks");
+        Console.WriteLine("5. Return to Main Menu");
         Console.WriteLine("-------------------------");
         int choice;
         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
@@ -71,6 +72,7 @@ public class UserInterface
                 
                 project.SetDescription(newDescription);
                 break;
+
             case 2:
                 Console.WriteLine("You selected option 2: Edit project owner and manager's name");
                 PrintNames("Current owners", project.GetOwners());
@@ -124,6 +126,7 @@ public class UserInterface
                 }
                 // Call the method to edit project owner and manager's name here
                 break;
+
             case 3:
                 Console.WriteLine("You selected option 3: Edit team members");
                 PrintNames("Current team members", project.GetMembers());
@@ -156,6 +159,7 @@ public class UserInterface
                         break;
                 }
                 break;
+
             case 4:
                 Console.WriteLine("You selected option 4: Edit project risks");
                 List<ProjectRisk> risks = project.GetRisks();
@@ -223,6 +227,10 @@ public class UserInterface
                         break;
                 }
                 break;
+
+            case 5: // return to main menu
+                return;
+
             default:
                 Console.WriteLine("Invalid choice. Please select a valid option.");
                 break;
@@ -236,6 +244,7 @@ public class UserInterface
         Console.WriteLine("Please select an option from the menu below:");
         Console.WriteLine("1. NonFunctional requirements");
         Console.WriteLine("2. Functional requirements");
+        Console.WriteLine("3. Return to Main Menu");
         int choice2;
         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice2);
 
@@ -280,6 +289,7 @@ public class UserInterface
                         break;
     }
                 break;
+
             case 2:
                 Console.WriteLine("You selected option 2: Edit functional requirements");
                 Console.WriteLine("-------------------------");
@@ -320,6 +330,10 @@ public class UserInterface
 
                 }
                 break;
+
+            case 3: // return to main menu
+                return;
+
             default:
                 Console.WriteLine("Invalid choice. Please select a valid option.");
                 break;
@@ -333,6 +347,7 @@ public class UserInterface
         Console.WriteLine("1. Log person-hours for a requirement");
         Console.WriteLine("2. View effort totals for each requirement");
         Console.WriteLine("3. View project-wide effort totals");
+        Console.WriteLine("4. Return to Main Menu");
         Console.WriteLine("-------------------------");
         int choice;
         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
@@ -436,6 +451,7 @@ public class UserInterface
                     }
                 }
                 break;
+
             case 3:
                 Console.WriteLine("You selected option 3: View project-wide effort totals");
                 Dictionary<string, int> projectTotals = new EffortEntry().GetEffortHours();
@@ -461,6 +477,10 @@ public class UserInterface
                 }
                 Console.WriteLine("  Total: " + total);
                 break;
+
+            case 4:
+                return;
+
             default:
                 Console.WriteLine("Invalid choice. Please select a valid option.");
                 break;
