@@ -43,7 +43,7 @@ public class UserInterface
 
         Console.WriteLine("-------------------------");
         Console.WriteLine("To get Started, please select an option from the menu below:");
-        Console.WriteLine("1. Edit a project information");
+        Console.WriteLine("1. Edit project information");
         Console.WriteLine("2. Edit project requirements");
         Console.WriteLine("3. View project effort and progress");
         Console.WriteLine("4. Quit");
@@ -302,7 +302,7 @@ public class UserInterface
                             Console.WriteLine($"Removal failed: no such requirement NFR-{temp_id}.");
                         }
                         break;
-                        
+
                     default:
                         Console.WriteLine("Invalid choice. Please select a valid option.");
                         break;
