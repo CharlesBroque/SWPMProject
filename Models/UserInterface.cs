@@ -8,6 +8,7 @@ public class UserInterface
         Console.WriteLine("Welcome to Group 6's Project Software Project Management Tool! Here you will be able to manage your projects information, requirements and efforts.");
         while (true)
         {
+            Console.WriteLine("[Main Menu]");
             Console.WriteLine("-------------------------");
             Console.WriteLine("To get Started, please select an option from the menu below:");
             Console.WriteLine("1. Edit project information");
@@ -45,216 +46,291 @@ public class UserInterface
 
     public static void EditProjectInformation(Project project)
     {
-        PrintProjectInformation(project);
-        Console.WriteLine("-------------------------");
-        Console.WriteLine("1. Edit project description");
-        Console.WriteLine("2. Add or remove project owners and managers");
-        Console.WriteLine("3. Add or remove team members");
-        Console.WriteLine("4. Manage project risks");
-        Console.WriteLine("5. Return to Main Menu");
-        Console.WriteLine("-------------------------");
-        int choice;
-        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
-
-        switch (choice)
+        while (true)
         {
-            case 1:
-                Console.WriteLine("You selected option 1: Edit project description.");
-                Console.Write("Enter a new description for the project: ");
-                string newDescription = Console.ReadLine() ?? project.GetDescription();
-                if (newDescription.IsWhiteSpace()) break; // preserve old description on empty input
-                
-                project.SetDescription(newDescription);
-                break;
+            PrintProjectInformation(project);
+            Console.WriteLine("[Edit Project Information Menu]");
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("1. Edit project description");
+            Console.WriteLine("2. Manage project owners and managers");
+            Console.WriteLine("3. Manage team members");
+            Console.WriteLine("4. Manage project risks");
+            Console.WriteLine("5. Return to Main Menu");
+            Console.WriteLine("-------------------------");
 
-            case 2:
-                Console.WriteLine("You selected option 2: Add or remove project owners and managers");
-                Console.WriteLine("-------------------------");
-                PrintNames("Current owners", project.GetOwners());
-                PrintNames("Current managers", project.GetManagers());
-                Console.WriteLine("-------------------------");
-                Console.WriteLine("1. Add owner");
-                Console.WriteLine("2. Remove owner");
-                Console.WriteLine("3. Add manager");
-                Console.WriteLine("4. Remove manager");
-                Console.WriteLine("-------------------------");
-                int subChoice;
-                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice);
+            int choice = ReadInt("Select an option: "); // Use helper
 
-                switch (subChoice)
-                {
-                    case 1: // add owner
-                        Console.Write("Enter the name of the owner to add: ");
-                        string ownerToAdd = Console.ReadLine() ?? "No Name";
-                        if (ownerToAdd.IsWhiteSpace()) break; // do not add blank input
-                        project.AddOwner(ownerToAdd);
-                        break;
+            switch (choice)
+            {
+                case 1: // Edit project description
+                    Console.WriteLine("You selected option 1: Edit project description.");
+                    Console.Write("Enter a new description for the project: ");
+                    string newDescription = Console.ReadLine() ?? project.GetDescription();
+                    if (newDescription.IsWhiteSpace())
+                    {
+                        Console.WriteLine("Description cannot be blank!");
+                        break; // preserve old description on empty input
+                    }
+                    project.SetDescription(newDescription);
+                    Console.WriteLine("Description updated.");
+                    break;
 
-                    case 2: // remove owner
-                        Console.Write("Enter the name of the owner to remove: ");
-                        string ownerToRemove = Console.ReadLine() ?? "No Name";
-                        if (project.RemoveOwner(ownerToRemove))
-                        {
-                            Console.WriteLine($"Owner '{ownerToRemove}' removed successfully.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Owner '{ownerToRemove}' not found.");
-                        }
-                        break;
+                case 2: // Manage project owners and managers
+                    Console.WriteLine("You selected option 2: Manage project owners and managers.");
+                    ManageOwnersAndManagers(project);
+                    break;
 
-                    case 3: // add manager
-                        Console.Write("Enter the name of the manager to add: ");
-                        string managerToAdd = Console.ReadLine() ?? "No Name";
-                        project.AddManager(managerToAdd);
-                        if (managerToAdd.IsWhiteSpace()) break; // do not add blank input
-                        break;
+                case 3: //Manage team members
+                    Console.WriteLine("You selected option 3: Manage team members")
+                    ManageTeamMembers(project);
+                    break;
 
-                    case 4: // remove manager
-                        Console.Write("Enter the name of the manager to remove: ");
-                        string managerToRemove = Console.ReadLine() ?? "No Name";
-                        if (project.RemoveManager(managerToRemove))
-                        {
-                            Console.WriteLine($"Manager '{managerToRemove}' removed successfully.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Manager '{managerToRemove}' not found.");
-                        }
-                        break;
+                case 4: // Manage project risks
+                    Console.WriteLine("You selected option 4: Manage project risks")
+                    ManageProjectRisks(project);
+                    break;
 
-                    default:
-                        Console.WriteLine("Invalid choice. Please select a valid option.");
-                        break;
-                }
-                break;
+                case 5: // return to main menu
+                    Console.WriteLine("Returning to Main Menu...");
+                    return;
 
-            case 3:
-                Console.WriteLine("You selected option 3: Add or remove team members");
-                Console.WriteLine("-------------------------");
-                PrintNames("Current team members", project.GetMembers());
-                Console.WriteLine("-------------------------");
-                Console.WriteLine("1. Add team member");
-                Console.WriteLine("2. Remove team member");
-                Console.WriteLine("-------------------------");
-                int subChoice2;
-                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice2);
-
-                switch (subChoice2)
-                {
-                    case 1:
-                        Console.Write("Enter the name of the team member to add: ");
-                        string memberToAdd = Console.ReadLine() ?? "No Name";
-                        if (memberToAdd.IsWhiteSpace()) break; // do not add blank input
-                        project.AddMember(memberToAdd);
-                        break;
-
-                    case 2:
-                        Console.Write("Enter the name of the team member to remove: ");
-                        string memberToRemove = Console.ReadLine() ?? "No Name";
-                        if (project.RemoveMember(memberToRemove))
-                        {
-                            Console.WriteLine($"Team member '{memberToRemove}' removed successfully.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Team member '{memberToRemove}' not found.");
-                        }
-                        break;
-
-                    default:
-                        Console.WriteLine("Invalid choice. Please select a valid option.");
-                        break;
-                }
-                break;
-
-            case 4:
-                Console.WriteLine("You selected option 4: Manage project risks");
-                Console.WriteLine("-------------------------");
-                List<ProjectRisk> risks = project.GetRisks();
-                foreach (ProjectRisk risk in risks)
-                {
-                    Console.WriteLine(risk.ToStringVerbose());
-                }
-                Console.WriteLine("-------------------------");
-                Console.WriteLine("1. Add risk");
-                Console.WriteLine("2. Edit risk");
-                Console.WriteLine("3. Remove risk");
-                Console.WriteLine("-------------------------");
-                int subChoice3;
-                int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice3);
-
-                int id;
-                switch (subChoice3)
-                {
-                    case 1:
-                        // add risk
-                        Console.Write("Enter the probability of the risk (0 to 1): ");
-                        float probability;
-                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
-                        float.Clamp(probability, 0, 1);
-                        Console.Write("Enter the cost of the risk: ");
-                        float cost;
-                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
-                        Console.Write("Enter the status of the risk: ");
-                        string status = Console.ReadLine() ?? "TBD";
-                        if (status.IsWhiteSpace()) status = "TBD"; // don't submit blank status
-                        Console.Write("Enter the description of the risk: ");
-                        string description = Console.ReadLine() ?? "No description.";
-                        if (description.IsWhiteSpace()) description = "No description."; // don't submit blank description
-                        project.AddRisk(probability, cost, status, description);
-                        break;
-
-                    case 2:
-                        // edit risk
-                        Console.Write("Enter the ID number of the risk to edit: ");
-                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
-
-                        ProjectRisk? risk = project.GetRiskByID(id);
-                        if (risk == null)
-                        {
-                            Console.WriteLine($"No such risk with ID number {id}.");
-                            break;
-                        }
-
-                        Console.Write("Enter the new probability of the risk (0 to 1): ");
-                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
-                        float.Clamp(probability, 0, 1);
-                        Console.Write("Enter the new cost of the risk: ");
-                        float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
-                        Console.Write("Enter the new status of the risk: ");
-                        status = Console.ReadLine() ?? "TBD";
-                        if (status.IsWhiteSpace()) status = "TBD"; // don't submit blank status
-                        Console.Write("Enter the new description of the risk: ");
-                        description = Console.ReadLine() ?? "No description.";
-                        if (description.IsWhiteSpace()) description = "No description."; // don't submit blank description
-                        project.UpdateRiskByID(id, probability, cost, status, description);
-                        break;
-
-                    case 3:
-                        // remove risk
-                        Console.Write("Enter the ID number of the risk to remove: ");
-                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
-                        if (project.RemoveRiskByID(id))
-                        {
-                            Console.WriteLine($"Risk R-{id} removed.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"No such risk with ID number {id}.");
-                        }
-                        break;
-                }
-                break;
-
-            case 5: // return to main menu
-                return;
-
-            default:
-                Console.WriteLine("Invalid choice. Please select a valid option.");
-                break;
+                default: // Invalid option
+                    Console.WriteLine("Invalid choice. Please select a valid option.");
+                    break;
+            }
         }
     }
+
+    private static void ManageOwnersAndManagers(Project project)
+    {
+        while (true)
+        {
+            Console.WriteLine("-------------------------");
+            PrintNames("Current owners", project.GetOwners());
+            PrintNames("Current managers", project.GetManagers());
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("1. Add owner");
+            Console.WriteLine("2. Remove owner");
+            Console.WriteLine("3. Add manager");
+            Console.WriteLine("4. Remove manager");
+            Console.WriteLine("5. Return to Edit Project Information Menu");
+            Console.WriteLine("-------------------------");
+
+            int subChoice = ReadInt("Select an option: ");
+
+            switch (subChoice)
+            {
+                case 1: // Add owner
+                    AddName("owner", project.AddOwner);
+                    break;
+                case 2: // Remove owner
+                    RemoveName("owner", project.GetOwners(), project.RemoveOwner)
+                    break;
+                case 3: // Add manager
+                    AddName("manager", project.AddManager);
+                    break;
+                case 4: // Remove manager
+                    RemoveName("manager", project.GetManagers(), project.RemoveManager);
+                    break;
+                case 5: // Return to previous menu
+                    Console.WriteLine("Returning to previous menu...");
+                    return;
+                default: // Invalid input
+                    Console.WriteLine("Invalid choice. Please select a valid option.")
+                    break;
+            }
+        }
+    }
+
+    private static void ManageTeamMembers(Project project)
+    {
+        while (true)
+        {
+            Console.WriteLine("-------------------------");
+            PrintNames("Current team members", project.GetMembers());
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("1. Add team member");
+            Console.WriteLine("2. Remove team member");
+            Console.WriteLine("3. Return to Edit Project Information Menu");
+            Console.WriteLine("-------------------------");
+
+            int subChoice = ReadInt("Select an option: ");
+
+            switch (subChoice)
+            {
+                case 1: // Add team member
+                    Addname("team member", project.AddMember);
+                    break;
+                case 2: // Remove team member
+                    RemoveName("team member", project.GetMembers(), project.Removemember);
+                    break;
+                case 3: // Return to previous mennu
+                    Console.WriteLine("Returning to previous menu...");
+                    return;
+                default: // Invalid input
+                    Console.WriteLine("Invalid choice. Please select a valid option.");
+                    break;
+            }
+        }
+    }
+
+    private static void AddName(string title, Action<string> add)
+    {
+        Console.Write("Enter the name of the " + title + " to add: ");
+        string name = Console.ReadLine() ?? "";
+
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("Name cannot be blank!");
+            return;
+        }
+        add(name);
+        Console.WriteLine(title + " added.");
+    }
+
+    private static void RemoveName(string title, List<string> names, Func<string, bool> remove)
+    {
+        if (names.Count == 0) // if empty
+        {
+            Console.WriteLine("There aren't any " + title + "'s to remove!");
+            return;
+        }
+        
+        Console.WriteLine("Enter the name of the " + title + " to remove: ");
+        string name = Console.ReadLine() ?? "";
+
+        if (remove(name))
+        {
+            Console.WriteLine(title + name + " removed.");
+        }
+        else
+        {
+            Console.WriteLine(title + name + " was not found.");
+        }
+    }
+
+    private static void ManageProjectRisks(Project project)
+    {
+        while (true)
+        {
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("Current project risks: ");
+            List<ProjectRisk> risks = project.GetRisks();
+
+            if (risks.Count == 0)
+            {
+                Console.WriteLine("(none)");
+            }
+
+            foreach (ProjectRisk risk in risks)
+            {
+                Console.WriteLine(risk.ToStringVerbose());
+            }
+            
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("1. Add risk");
+            Console.WriteLine("2. Edit risk");
+            Console.WriteLine("3. Remove risk");
+            Console.WriteLine("4. Return to Edit Project Information Menu");
+            Console.WriteLine("-------------------------");
+
+            int subChoice = ReadInt("Select an option: ");
+
+            switch (subChoice)
+            {
+                case 1: // Add risk
+                    AddProjectRisk(project);
+                    break;
+                case 2: // Edit risk
+                    EditProjectRisk(project);
+                    break;
+                case 3: // Remove risk
+                    RemoveProjectRisk(project);
+                    break;
+                case 4: // Return to previous menu
+                    Console.WriteLine("Returning to previous menu...");
+                    return;
+                default: // Invalid input
+                    Console.WriteLine("Invalid choice. Please select a valid option.");
+                    break;
+            }
+        }
+    }
+
+    private static void AddProjectRisk(Project project)
+    { 
+        float probability = ReadFloat("Enter the probability of the risk (0 to 1): ");
+        float cost = ReadFloat("Enter the cost of the risk: ");
+
+        Console.Write("Enter the status of the risk: ");
+        string status = Console.ReadLine() ?? "";
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            status = "TBD";
+        }
+        
+        Console.Write("Enter the description of the risk: ");
+        string description = Console.ReadLine() ?? "";
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            description = "No description.";
+        }
+
+        try
+        {
+            int id = project.AddRisk(probability, cost, status, description);
+            Console.WriteLine("Risk R-" + id + "added.")
+        }
+        catch (ArgumentException exception)
+        {
+            Console.WriteLine("Could not add risk: " + exception.Message);
+        }
+    }
+    
+    Project static void EditProjectRisk(Project project)
+    {
+        int id = ReadInt("Enter the ID of the risk to edit: ");
+        ProjectRisk? risk = project.GetRiskByID(id);
+
+        if (risk == null)
+        {
+            Console.WriteLine("No risk found with ID " + id + ".");
+            return;
+        }
+        
+        float probability = ReadFloat("Enter thr new probability (0 to 1): ");
+        float cost = ReadFloat("Enter the new cost of the risk: ");
+        Console.Write("Enter the new status: ");
+        string status = Console.ReadLine() ?? "";
+        Console.Write("Enter the new description: ");
+        string description = Coonsole.ReadLine() ?? "";
+
+        try
+        {
+            project.UpdateRiskByID(id, probability, cost, string.IsNullOrWhiteSpace(status) ? null : status,
+                string.IsNullOrWhiteSpace(description) ? null : description);
+            Console.WriteLine("Risk R-" + id + " updated.");
+        }
+        catch (ArgumentException exception)
+        {
+            Console.WriteLine("Could not update risk: " + exception.Message);
+        }
+    }
+
+    private static void RemoveProjectRisk(Project project)
+    {
+        int id = ReadInt("Enter the ID number of the risk to remove: ");
+
+        if (project.RemoveRiskByID(id))
+        {
+            Console.WriteLine("Risk R-" + id + " removed.");
+        }
+        else
+        {
+            Console.WriteLine("No risk found with ID " + id + ".");
+        }
+    }
+    
 
     public static void EditProjectRequirements(Project project)
     {
@@ -552,6 +628,35 @@ public class UserInterface
                 break;
         }
     }
+    
+    
+    private static int ReadInt(string message)
+    {
+        while (true)
+        {
+            Console.Write(message);
+            if (int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out int num))
+            {
+                return num;
+            }
+            Console.WriteLine("Please enter a valid whole number!");
+        }
+    }
+
+    private static float ReadFloat(string message)
+    {
+        while (true)
+        {
+            Console.Write(message);
+            if (float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out float num) && float.IsFinite(num))
+            {
+                return num;
+            }
+            Console.WriteLine("Please enter a valid finite number!");
+        }
+    }
+    
     private static void PrintNames(string label, List<string> names)
     {
         if (names.Count == 0)
