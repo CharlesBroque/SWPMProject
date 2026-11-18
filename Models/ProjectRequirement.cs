@@ -169,7 +169,7 @@ public class ProjectRequirement
 
 		foreach (KeyValuePair<string, int> estimate in estimatedEffortHours) 
 		{
-			variance[estimate.Key] = actualTotals[estimate.Key] - estimate.Value;
+			difference[estimate.Key] = actualTotals[estimate.Key] - estimate.Value;
 		}
 		return difference;
 	}
