@@ -48,11 +48,10 @@ public class UserInterface
     {
         PrintProjectInformation(project);
         Console.WriteLine("-------------------------");
-        Console.WriteLine("Please select an option to edit project information:");
-        Console.WriteLine("1. Description");
-        Console.WriteLine("2. Project Owner and Manager's name");
-        Console.WriteLine("3. Team Members");
-        Console.WriteLine("4. Project Risks");
+        Console.WriteLine("1. Edit project description");
+        Console.WriteLine("2. Add or remove project owners and managers");
+        Console.WriteLine("3. Add or remove team members");
+        Console.WriteLine("4. Manage project risks");
         Console.WriteLine("5. Return to Main Menu");
         Console.WriteLine("-------------------------");
         int choice;
@@ -61,32 +60,39 @@ public class UserInterface
         switch (choice)
         {
             case 1:
-                Console.WriteLine("You selected option 1: Edit project description, Please enter the new description:");
-                string newDescription = Console.ReadLine() ?? "";
+                Console.WriteLine("You selected option 1: Edit project description.");
+                Console.Write("Enter a new description for the project: ");
+                string newDescription = Console.ReadLine() ?? project.GetDescription();
+                if (newDescription.IsWhiteSpace()) break; // preserve old description on empty input
                 
                 project.SetDescription(newDescription);
                 break;
 
             case 2:
-                Console.WriteLine("You selected option 2: Edit project owner and manager's name");
+                Console.WriteLine("You selected option 2: Add or remove project owners and managers");
+                Console.WriteLine("-------------------------");
                 PrintNames("Current owners", project.GetOwners());
                 PrintNames("Current managers", project.GetManagers());
+                Console.WriteLine("-------------------------");
                 Console.WriteLine("1. Add owner");
                 Console.WriteLine("2. Remove owner");
                 Console.WriteLine("3. Add manager");
                 Console.WriteLine("4. Remove manager");
+                Console.WriteLine("-------------------------");
                 int subChoice;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice);
 
                 switch (subChoice)
                 {
-                    case 1:
-                        Console.WriteLine("Enter the name of the owner to add:");
+                    case 1: // add owner
+                        Console.Write("Enter the name of the owner to add: ");
                         string ownerToAdd = Console.ReadLine() ?? "No Name";
+                        if (ownerToAdd.IsWhiteSpace()) break; // do not add blank input
                         project.AddOwner(ownerToAdd);
                         break;
-                    case 2:
-                        Console.WriteLine("Enter the name of the owner to remove:");
+
+                    case 2: // remove owner
+                        Console.Write("Enter the name of the owner to remove: ");
                         string ownerToRemove = Console.ReadLine() ?? "No Name";
                         if (project.RemoveOwner(ownerToRemove))
                         {
@@ -97,13 +103,16 @@ public class UserInterface
                             Console.WriteLine($"Owner '{ownerToRemove}' not found.");
                         }
                         break;
-                    case 3:
-                        Console.WriteLine("Enter the name of the manager to add:");
+
+                    case 3: // add manager
+                        Console.Write("Enter the name of the manager to add: ");
                         string managerToAdd = Console.ReadLine() ?? "No Name";
                         project.AddManager(managerToAdd);
+                        if (managerToAdd.IsWhiteSpace()) break; // do not add blank input
                         break;
-                    case 4:
-                        Console.WriteLine("Enter the name of the manager to remove:");
+
+                    case 4: // remove manager
+                        Console.Write("Enter the name of the manager to remove: ");
                         string managerToRemove = Console.ReadLine() ?? "No Name";
                         if (project.RemoveManager(managerToRemove))
                         {
@@ -114,30 +123,35 @@ public class UserInterface
                             Console.WriteLine($"Manager '{managerToRemove}' not found.");
                         }
                         break;
+
                     default:
                         Console.WriteLine("Invalid choice. Please select a valid option.");
                         break;
                 }
-                // Call the method to edit project owner and manager's name here
                 break;
 
             case 3:
-                Console.WriteLine("You selected option 3: Edit team members");
+                Console.WriteLine("You selected option 3: Add or remove team members");
+                Console.WriteLine("-------------------------");
                 PrintNames("Current team members", project.GetMembers());
+                Console.WriteLine("-------------------------");
                 Console.WriteLine("1. Add team member");
-                Console.WriteLine("2. Remove team member");         
+                Console.WriteLine("2. Remove team member");
+                Console.WriteLine("-------------------------");
                 int subChoice2;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice2);
 
                 switch (subChoice2)
                 {
                     case 1:
-                        Console.WriteLine("Enter the name of the team member to add:");
+                        Console.Write("Enter the name of the team member to add: ");
                         string memberToAdd = Console.ReadLine() ?? "No Name";
+                        if (memberToAdd.IsWhiteSpace()) break; // do not add blank input
                         project.AddMember(memberToAdd);
                         break;
+
                     case 2:
-                        Console.WriteLine("Enter the name of the team member to remove:");
+                        Console.Write("Enter the name of the team member to remove: ");
                         string memberToRemove = Console.ReadLine() ?? "No Name";
                         if (project.RemoveMember(memberToRemove))
                         {
@@ -148,6 +162,7 @@ public class UserInterface
                             Console.WriteLine($"Team member '{memberToRemove}' not found.");
                         }
                         break;
+
                     default:
                         Console.WriteLine("Invalid choice. Please select a valid option.");
                         break;
@@ -155,15 +170,18 @@ public class UserInterface
                 break;
 
             case 4:
-                Console.WriteLine("You selected option 4: Edit project risks");
+                Console.WriteLine("You selected option 4: Manage project risks");
+                Console.WriteLine("-------------------------");
                 List<ProjectRisk> risks = project.GetRisks();
                 foreach (ProjectRisk risk in risks)
                 {
                     Console.WriteLine($"ID: {risk.GetID()}, Probability: {risk.GetProbability()}, Cost: {risk.GetCost()}, Status: {risk.GetStatus()}, Description: {risk.GetDescription()}");
                 }
+                Console.WriteLine("-------------------------");
                 Console.WriteLine("1. Add risk");
                 Console.WriteLine("2. Edit risk");
                 Console.WriteLine("3. Remove risk");
+                Console.WriteLine("-------------------------");
                 int subChoice3;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out subChoice3);
 
@@ -172,21 +190,24 @@ public class UserInterface
                 {
                     case 1:
                         // add risk
-                        Console.WriteLine("Enter the probability of the risk (0 to 1):");
+                        Console.Write("Enter the probability of the risk (0 to 1): ");
                         float probability;
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
-                        Console.WriteLine("Enter the cost of the risk:");
+                        Console.Write("Enter the cost of the risk: ");
                         float cost;
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
-                        Console.WriteLine("Enter the status of the risk:");
+                        Console.Write("Enter the status of the risk: ");
                         string status = Console.ReadLine() ?? "TBD";
-                        Console.WriteLine("Enter the description of the risk:");
+                        if (status.IsWhiteSpace()) status = "TBD"; // don't submit blank status
+                        Console.Write("Enter the description of the risk: ");
                         string description = Console.ReadLine() ?? "No description.";
+                        if (description.IsWhiteSpace()) description = "No description."; // don't submit blank description
                         project.AddRisk(probability, cost, status, description);
                         break;
+
                     case 2:
                         // edit risk
-                        Console.WriteLine("Enter the ID of the risk to edit:");
+                        Console.Write("Enter the ID of the risk to edit: ");
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
 
                         ProjectRisk? risk = project.GetRiskByID(id);
@@ -196,19 +217,22 @@ public class UserInterface
                             break;
                         }
 
-                        Console.WriteLine("Enter the new probability of the risk (0 to 1):");
+                        Console.Write("Enter the new probability of the risk (0 to 1): ");
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
-                        Console.WriteLine("Enter the new cost of the risk:");
+                        Console.Write("Enter the new cost of the risk: ");
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
-                        Console.WriteLine("Enter the new status of the risk:");
+                        Console.Write("Enter the new status of the risk: ");
                         status = Console.ReadLine() ?? "TBD";
-                        Console.WriteLine("Enter the new description of the risk:");
+                        if (status.IsWhiteSpace()) status = "TBD"; // don't submit blank status
+                        Console.Write("Enter the new description of the risk: ");
                         description = Console.ReadLine() ?? "No description.";
+                        if (description.IsWhiteSpace()) description = "No description."; // don't submit blank description
                         project.UpdateRiskByID(id, probability, cost, status, description);
                         break;
+
                     case 3:
                         // remove risk
-                        Console.WriteLine("Enter the ID of the risk to remove:");
+                        Console.Write("Enter the ID of the risk to remove: ");
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
                         if (project.RemoveRiskByID(id))
                         {
@@ -235,35 +259,36 @@ public class UserInterface
     {
         Console.WriteLine("-------------------------");
         PrintProjectInformation(project);
-        Console.WriteLine("Please select an option from the menu below:");
-        Console.WriteLine("1. NonFunctional requirements");
-        Console.WriteLine("2. Functional requirements");
+        Console.WriteLine("-------------------------");
+        Console.WriteLine("1. Manage nonfunctional requirements");
+        Console.WriteLine("2. Manage functional requirements");
         Console.WriteLine("3. Return to Main Menu");
+        Console.WriteLine("-------------------------");
         int choice2;
         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice2);
 
         switch (choice2)
         {
             case 1:
-                Console.WriteLine("You selected option 1: Edit nonfunctional requirements");
+                Console.WriteLine("You selected option 1: Manage nonfunctional requirements");
                 Console.WriteLine("-------------------------");
-                Console.WriteLine("Please select an option from the menu below:");
-                Console.WriteLine("1. Add a project requirement");
-                Console.WriteLine("2. Update a project requirement");
-                Console.WriteLine("3. Remove a project requirement");
+                Console.WriteLine("1. Add a nonfunctional requirement");
+                Console.WriteLine("2. Update a nonfunctional requirement");
+                Console.WriteLine("3. Remove a nonfunctional requirement");
                 Console.WriteLine("-------------------------");
                 int choice;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
                 switch (choice)
     {
                     case 1:
-                        Console.WriteLine("You selected option 1: Add a project requirement:");
+                        Console.WriteLine("You selected option 1: Add a nonfunctional requirement.");
+                        Console.Write("Enter a description for the new requirement: ");
                         string newRequirementDescription = Console.ReadLine() ?? "No description.";
                         project.AddNFRequirement(newRequirementDescription);
                         break;
 
                     case 2:
-                        Console.WriteLine("You selected option 2: Update a project requirement");
+                        Console.WriteLine("You selected option 2: Update a nonfunctional requirement");
                         
                         Console.Write("Enter requirement ID number: ");
                         int my_id;
@@ -284,7 +309,8 @@ public class UserInterface
                         break;
 
                     case 3:
-                        Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
+                        Console.WriteLine("You selected option 3: Remove a nonfunctional requirement.");
+                        Console.Write("Please enter the ID of the requirement to remove: ");
                         int temp_id;
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out temp_id);
                         if (project.RemoveNFRequirementByID(temp_id))
@@ -304,32 +330,34 @@ public class UserInterface
                 break;
 
             case 2:
-                Console.WriteLine("You selected option 2: Edit functional requirements");
+                Console.WriteLine("You selected option 2: Manage functional requirements");
                 Console.WriteLine("-------------------------");
-                Console.WriteLine("Please select an option from the menu below:");
-                Console.WriteLine("1. Add a project requirement");
-                Console.WriteLine("2. Update a project requirement");
-                Console.WriteLine("3. Remove a project requirement");
+                Console.WriteLine("1. Add a functional requirement");
+                Console.WriteLine("2. Update a functional requirement");
+                Console.WriteLine("3. Remove a functional requirement");
                 Console.WriteLine("-------------------------");
                 int choice3;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice3);
                 switch (choice3)
                 {
                     case 1:
-                        Console.WriteLine("You selected option 1: Add a project requirement. Enter a description for the new requirement:");
+                        Console.WriteLine("You selected option 1: Add a functional requirement.");
+                        Console.Write("Enter a description for the new requirement: ");
                         string newRequirementDescription = Console.ReadLine() ?? "No description.";
+                        if (newRequirementDescription.IsWhiteSpace()) newRequirementDescription = "No description."; // don't submit blank description
                         project.AddFRequirement(newRequirementDescription);
                         break;
                     
                     case 2:
                         Console.WriteLine("You selected option 2: Update a project requirement");
                         
-                        Console.Write("Enter requirement ID number: ");
+                        Console.Write("Enter requirement ID number to update: ");
                         int my_id;
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out my_id);
                         
                         Console.Write("Enter a new description for the requirement: ");
                         string my_desc = Console.ReadLine() ?? "No description.";
+                        if (my_desc.IsWhiteSpace()) my_desc = "No description."; // don't submit blank description
 
                         if (project.UpdateFRequirementByID(my_id, my_desc))
                         {
@@ -343,7 +371,8 @@ public class UserInterface
                         break;
 
                     case 3:
-                        Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
+                        Console.WriteLine("You selected option 3: Remove a project requirement.");
+                        Console.Write("Please enter the ID of the requirement to remove: ");
                         int temp_id;
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out temp_id);
                         if (project.RemoveFRequirementByID(temp_id))
@@ -374,7 +403,6 @@ public class UserInterface
     public static void editProjectEffortAndProgress(Project project)
     {
         Console.WriteLine("-------------------------");
-        Console.WriteLine("Please select an option from the menu below:");
         Console.WriteLine("1. Log person-hours for a requirement");
         Console.WriteLine("2. View effort totals for each requirement");
         Console.WriteLine("3. View project-wide effort totals");
@@ -387,10 +415,13 @@ public class UserInterface
         {
             case 1:
                 Console.WriteLine("You selected option 1: Log person-hours for a requirement");
-                Console.WriteLine("1. Functional requirement");
-                Console.WriteLine("2. Nonfunctional requirement");
+                Console.WriteLine("-------------------------");
+                Console.WriteLine("1. Log person-hours for a functional requirement");
+                Console.WriteLine("2. Log person-hours for a nonfunctional requirement");
+                Console.WriteLine("-------------------------");
                 int typeChoice;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out typeChoice);
+                
                 List<ProjectRequirement> requirements;
                 if (typeChoice == 1)
                 {
@@ -404,7 +435,8 @@ public class UserInterface
                 {
                     Console.WriteLine("  " + req.ToString());
                 }
-                Console.WriteLine("Enter the ID of the requirement:");
+
+                Console.Write("Enter the ID number of the requirement: ");
                 int id;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
                 ProjectRequirement? requirement = requirements.Find(r => r.GetID() == id);
@@ -416,6 +448,7 @@ public class UserInterface
 
                 Console.WriteLine("Enter the date of the work (yyyy-mm-dd). For a weekly entry, enter the first day of the week:");
                 string date = Console.ReadLine() ?? DateTime.Today.ToShortDateString();
+                if (date.IsWhiteSpace()) date = DateTime.Today.ToShortDateString(); // set default to today on blank
                 
                 // validate date here instead of at the end
                 if (!DateOnly.TryParse(date, out _))
@@ -542,10 +575,7 @@ public class UserInterface
         if (risks.Count == 0) Console.WriteLine("  (none)");
         foreach (ProjectRisk risk in risks)
         {
-            Console.WriteLine("  ID " + risk.GetID() + ": " + risk.GetDescription()
-                + " | probability: " + risk.GetProbability()
-                + " | cost: " + risk.GetCost()
-                + " | status: " + risk.GetStatus());
+            Console.WriteLine(risk.ToStringVerbose());
         }
 
         Console.WriteLine("Functional requirements:");
@@ -553,7 +583,7 @@ public class UserInterface
         if (fRequirements.Count == 0) Console.WriteLine("  (none)");
         foreach (ProjectRequirement fReq in fRequirements)
         {
-            Console.WriteLine("  ID " + fReq.GetID() + ": " + fReq.ToString());
+            Console.WriteLine(fReq.ToString());
         }
 
         Console.WriteLine("Nonfunctional requirements:");
@@ -561,7 +591,7 @@ public class UserInterface
         if (nfRequirements.Count == 0) Console.WriteLine("  (none)");
         foreach (ProjectRequirement nfReq in nfRequirements)
         {
-            Console.WriteLine("  ID " + nfReq.GetID() + ": " + nfReq.ToString());
+            Console.WriteLine(nfReq.ToString());
         }
     }
 }

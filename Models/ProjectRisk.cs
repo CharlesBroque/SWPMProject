@@ -141,6 +141,13 @@ public class ProjectRisk
     /// </summary>
     public override string ToString()
     {
-        return "R-" + idNumber.ToString() + "(" + status.ToString() + "): " + description;
+        return "R-" + idNumber.ToString() + " (" + status.ToString() + "): " + description;
+    }
+    public string ToStringVerbose()
+    {
+        return "R-" + idNumber.ToString() + " (" + status.ToString() + "): " + description + "\t"
+        + " | Probability: " + probability
+        + " | Cost: " + cost
+        + " | Risk Value: " + riskValue;
     }
 }
