@@ -393,7 +393,7 @@ public class UserInterface
                 Console.WriteLine("Enter hours for Project Management:");
                 int hoursProjManagement;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursProjManagement);
-                Console.WriteLine("Enter hours for Uncategorized effort:");
+                Console.WriteLine("Enter hours for effort not belonging to any category:");
                 int hoursUncategorized;
                 int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out hoursUncategorized);
 
@@ -412,7 +412,7 @@ public class UserInterface
                     Console.WriteLine("Invalid date. Effort entry was not added.");
                 }
                 break;
-                
+
             case 2:
                 Console.WriteLine("You selected option 2: View effort totals for each requirement");
                 Console.WriteLine("Functional requirements:");
