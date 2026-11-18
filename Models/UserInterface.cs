@@ -267,10 +267,28 @@ public class UserInterface
                         string newRequirementDescription = Console.ReadLine() ?? "No description.";
                         project.AddNFRequirement(newRequirementDescription);
                         break;
+
                     case 2:
                         Console.WriteLine("You selected option 2: Update a project requirement");
-                        // Call the method to update a project requirement here
+                        
+                        Console.Write("Enter requirement ID number: ");
+                        int my_id;
+                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out my_id);
+                        
+                        Console.Write("Enter a new description for the requirement: ");
+                        string my_desc = Console.ReadLine() ?? "No description.";
+
+                        if (project.UpdateNFRequirementByID(my_id, my_desc))
+                        {
+                            Console.WriteLine($"Successfully updated NFR-{my_id}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Could not update: No such requirement NFR-{my_id}.");
+                        }
+                        
                         break;
+
                     case 3:
                         Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
                         int temp_id;
@@ -284,6 +302,7 @@ public class UserInterface
                             Console.WriteLine($"Removal failed: no such requirement NFR-{temp_id}.");
                         }
                         break;
+                        
                     default:
                         Console.WriteLine("Invalid choice. Please select a valid option.");
                         break;
@@ -307,10 +326,28 @@ public class UserInterface
                         string newRequirementDescription = Console.ReadLine() ?? "No description.";
                         project.AddFRequirement(newRequirementDescription);
                         break;
+                    
                     case 2:
                         Console.WriteLine("You selected option 2: Update a project requirement");
-                        // Call the method to update a project requirement here
+                        
+                        Console.Write("Enter requirement ID number: ");
+                        int my_id;
+                        int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out my_id);
+                        
+                        Console.Write("Enter a new description for the requirement: ");
+                        string my_desc = Console.ReadLine() ?? "No description.";
+
+                        if (project.UpdateFRequirementByID(my_id, my_desc))
+                        {
+                            Console.WriteLine($"Successfully updated FR-{my_id}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Could not update: No such requirement FR-{my_id}.");
+                        }
+                        
                         break;
+
                     case 3:
                         Console.WriteLine("You selected option 3: Please enter the ID of the requirement to remove:");
                         int temp_id;
