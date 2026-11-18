@@ -208,13 +208,13 @@ public class UserInterface
 
                     case 2:
                         // edit risk
-                        Console.Write("Enter the ID of the risk to edit: ");
+                        Console.Write("Enter the ID number of the risk to edit: ");
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
 
                         ProjectRisk? risk = project.GetRiskByID(id);
                         if (risk == null)
                         {
-                            Console.WriteLine($"No such risk with ID {id}.");
+                            Console.WriteLine($"No such risk with ID number {id}.");
                             break;
                         }
 
@@ -234,7 +234,7 @@ public class UserInterface
 
                     case 3:
                         // remove risk
-                        Console.Write("Enter the ID of the risk to remove: ");
+                        Console.Write("Enter the ID number of the risk to remove: ");
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out id);
                         if (project.RemoveRiskByID(id))
                         {
@@ -242,7 +242,7 @@ public class UserInterface
                         }
                         else
                         {
-                            Console.WriteLine($"No such risk with ID {id}.");
+                            Console.WriteLine($"No such risk with ID number {id}.");
                         }
                         break;
                 }
@@ -286,13 +286,14 @@ public class UserInterface
                         Console.WriteLine("You selected option 1: Add a nonfunctional requirement.");
                         Console.Write("Enter a description for the new requirement: ");
                         string newRequirementDescription = Console.ReadLine() ?? "No description.";
+                        if (newRequirementDescription.IsWhiteSpace()) newRequirementDescription = "No description."; // don't submit blank description
                         project.AddNFRequirement(newRequirementDescription);
                         break;
 
                     case 2:
                         Console.WriteLine("You selected option 2: Update a nonfunctional requirement");
                         
-                        Console.Write("Enter requirement ID number: ");
+                        Console.Write("Enter the ID number of the requirement to update: ");
                         int my_id;
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out my_id);
                         
@@ -312,7 +313,7 @@ public class UserInterface
 
                     case 3:
                         Console.WriteLine("You selected option 3: Remove a nonfunctional requirement.");
-                        Console.Write("Please enter the ID of the requirement to remove: ");
+                        Console.Write("Enter the ID number of the requirement to remove: ");
                         int temp_id;
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out temp_id);
                         if (project.RemoveNFRequirementByID(temp_id))
@@ -351,9 +352,9 @@ public class UserInterface
                         break;
                     
                     case 2:
-                        Console.WriteLine("You selected option 2: Update a project requirement");
+                        Console.WriteLine("You selected option 2: Update a functional requirement");
                         
-                        Console.Write("Enter requirement ID number to update: ");
+                        Console.Write("Enter the ID number of the requirement to update: ");
                         int my_id;
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out my_id);
                         
@@ -373,8 +374,8 @@ public class UserInterface
                         break;
 
                     case 3:
-                        Console.WriteLine("You selected option 3: Remove a project requirement.");
-                        Console.Write("Please enter the ID of the requirement to remove: ");
+                        Console.WriteLine("You selected option 3: Remove a functional requirement.");
+                        Console.Write("Enter the ID of the requirement to remove: ");
                         int temp_id;
                         int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out temp_id);
                         if (project.RemoveFRequirementByID(temp_id))
