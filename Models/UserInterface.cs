@@ -175,7 +175,7 @@ public class UserInterface
                 List<ProjectRisk> risks = project.GetRisks();
                 foreach (ProjectRisk risk in risks)
                 {
-                    Console.WriteLine($"ID: {risk.GetID()}, Probability: {risk.GetProbability()}, Cost: {risk.GetCost()}, Status: {risk.GetStatus()}, Description: {risk.GetDescription()}");
+                    Console.WriteLine(risk.ToStringVerbose());
                 }
                 Console.WriteLine("-------------------------");
                 Console.WriteLine("1. Add risk");
@@ -193,6 +193,7 @@ public class UserInterface
                         Console.Write("Enter the probability of the risk (0 to 1): ");
                         float probability;
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
+                        float.Clamp(probability, 0, 1);
                         Console.Write("Enter the cost of the risk: ");
                         float cost;
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
@@ -219,6 +220,7 @@ public class UserInterface
 
                         Console.Write("Enter the new probability of the risk (0 to 1): ");
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out probability);
+                        float.Clamp(probability, 0, 1);
                         Console.Write("Enter the new cost of the risk: ");
                         float.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.Float, null, out cost);
                         Console.Write("Enter the new status of the risk: ");
