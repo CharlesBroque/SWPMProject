@@ -374,7 +374,7 @@ public class Project
     /// <returns>A dictionary with the total hours for each effort catrgory.</returns>
     public Dictionary<string, int> GetProjectEffortTotals()
     {
-        Dictionary<string, int> totals = new EffortEntry().GetEffortHours(); 
+        Dictionary<string, int> totals = new Dictionary<string, int>(new EffortEntry().GetEffortHours()); 
         // functional req.
         foreach (ProjectRequirement req in fRequirements)
         {
@@ -394,6 +394,51 @@ public class Project
             }
         }
         return totals;
+    }
+
+    /// <summary>
+    /// GetProjectEstimatedEffortTotals: Gets the estimated effort hours across all project reqs.
+    /// </summary>
+    /// <returns>A dictionary containing estimated hours by category</returns>
+	public Dictionary<string, int> GetProjectEstimatedEffortTotals()
+    {
+        Dictionary<string, int> totals = new Dictionary<string, int>(new EffortEntry().GetEffortHours());
+        // functional req.
+        foreach (ProjectRequirement req in fRequirements)
+        {
+            Dictionary<string, int> estimates = req.GetEstimatedEffortHours();
+            foreach (KeyValuePair<string, int> entry in estimates)
+            {
+                totals[entry.Key] += entry.Value;
+            }
+        }
+        // non-functional req.
+        foreach (ProjectRequirement req in nfRequirements)
+        {
+            Dictionary<string, int> estimates = req.GetEstimatedEffortHours();
+            foreach (KeyValuePair<string, int> entry in estimates)
+            {
+                totals[entry.Key] += entry.Value;
+            }
+        }
+        return totals;
+    }
+
+    /// <summary>
+    /// GetProjectEffortDifference: Calculates the difference between actual effort and estimated effort across the project.
+    /// </summary>
+    /// <returns>A dictionary containing the difference for each category.</returns>
+    public Dictionary<string, int> GetProjectEffortDifference()
+    {
+        Dictionary<string, int> actualTotals = GetProjectEffortTotals();
+        Dictionary<string, int> estimatedTotals = GetProjectEstimatedEffortTotals();
+        
+        Dictionary<string, int> difference = new Dictionary<string, int>();
+        foreach (KeyValuePair<string, int> estimate in estimatedTotals)
+        {
+            difference[estimate.Key] = actualTotals[estimate.Key] - estimate.Value;
+        }
+        return difference;
     }
     
     // save to/load from disk? maybe out of scope
