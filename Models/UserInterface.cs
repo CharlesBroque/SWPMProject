@@ -9,7 +9,13 @@ public class UserInterface
         Console.WriteLine("Welcome to Group 6's Project Software Project Management Tool! Here you will be able to manage your projects information, requirements and efforts.");
         while (true)
         {
-            DisplayMenu();
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("To get Started, please select an option from the menu below:");
+            Console.WriteLine("1. Edit project information");
+            Console.WriteLine("2. Edit project requirements");
+            Console.WriteLine("3. View project effort and progress");
+            Console.WriteLine("4. Quit");
+            Console.WriteLine("-------------------------");
             int choice;
             int.TryParse(Console.ReadLine(), System.Globalization.NumberStyles.None, null, out choice);
             switch (choice)
@@ -36,18 +42,6 @@ public class UserInterface
             }
         }
         
-    }
-
-    public static void DisplayMenu()
-    {
-
-        Console.WriteLine("-------------------------");
-        Console.WriteLine("To get Started, please select an option from the menu below:");
-        Console.WriteLine("1. Edit project information");
-        Console.WriteLine("2. Edit project requirements");
-        Console.WriteLine("3. View project effort and progress");
-        Console.WriteLine("4. Quit");
-        Console.WriteLine("-------------------------");
     }
 
     public static void EditProjectInformation(Project project)
@@ -322,7 +316,7 @@ public class UserInterface
                 switch (choice3)
                 {
                     case 1:
-                        Console.WriteLine("You selected option 1: Add a project requirement:");
+                        Console.WriteLine("You selected option 1: Add a project requirement. Enter a description for the new requirement:");
                         string newRequirementDescription = Console.ReadLine() ?? "No description.";
                         project.AddFRequirement(newRequirementDescription);
                         break;
