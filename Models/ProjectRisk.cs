@@ -23,7 +23,7 @@ public class ProjectRisk
     public ProjectRisk(int id, float probability, float cost, string status, string description)
     {
         this.idNumber = id;
-        this.probability = probability;
+        this.probability = ValidateProbability(probability);
         this.cost = cost;
         this.status = status;
         this.description = description;
@@ -75,8 +75,20 @@ public class ProjectRisk
     /// <param name="probability">The new risk probability</param>
     public void SetProbability(float probability)
     {
-        this.probability = probability;
+        this.probability = ValidateProbability(probability);
         UpdateRiskValue();
+    }
+
+    /// <summary>
+    /// ValidateProbability: Restricts probability to fall between 0 and 1.
+    /// </summary>
+    private static float ValidateProbability(float probability)
+    {
+        if (!float.IsFinite(probability))
+        {
+            throw new ArgumentException("Probability must be a finite number.", nameof(probability));
+        }
+        return Math.Clamp(probability, 0f, 1f);
     }
     
     /// <summary>
@@ -111,7 +123,7 @@ public class ProjectRisk
     /// </summary>
     private void UpdateRiskValue()
     {
-        riskValue = float.Round(probability * cost);
+        riskValue = MathF.Round(probability * cost, 2);
     }
     
     /// <summary>
