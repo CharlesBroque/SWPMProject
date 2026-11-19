@@ -24,7 +24,7 @@ public class EffortEntry
             { "Proj Management", 0 },
             { "Uncategorized", 0 }
         };
-        datestamp = DateOnly.FromDateTime(DateTime.Now);
+        datestamp = DateOnly.FromDateTime(DateTime.Today);
     }
 
     /// <summary>
@@ -86,6 +86,16 @@ public class EffortEntry
     {
         return datestamp;
     }
+    /// <summary>
+    /// GetWeekstamp: Gets the date of the Sunday of the week of the date associated with the effort entry.
+    /// In other words, it gets the nearest Sunday which is on or before the datestamp.
+    /// </summary>
+    public DateOnly GetWeekstamp()
+    {
+        DateOnly weekstamp = new(datestamp.Year, datestamp.Month, datestamp.Day);
+        weekstamp = weekstamp.AddDays(-(int)datestamp.DayOfWeek); // sets weekstamp to Sunday of that week
+        return weekstamp;
+    }
     
     /// <summary>
     /// SetDatestamp: Sets the datestamp.
@@ -106,5 +116,5 @@ public class EffortEntry
         return false;
     }
 
-    // public string ToString(); // some kind of readout will eventually be needed
+    // public override string ToString()? // maybe not necessary
 }
