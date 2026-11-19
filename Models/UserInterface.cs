@@ -160,7 +160,7 @@ public class UserInterface
             switch (subChoice)
             {
                 case 1: // Add team member
-                    Addname("team member", project.AddMember);
+                    AddName("team member", project.AddMember);
                     break;
                 case 2: // Remove team member
                     RemoveName("team member", project.GetMembers(), project.RemoveMember);
@@ -288,7 +288,7 @@ public class UserInterface
         }
     }
     
-    Project static void EditProjectRisk(Project project)
+    private static void EditProjectRisk(Project project)
     {
         int id = ReadInt("Enter the ID of the risk to edit: ");
         ProjectRisk? risk = project.GetRiskByID(id);
@@ -355,7 +355,7 @@ public class UserInterface
                         project.UpdateNFRequirementByID, project.RemoveNFRequirementByID, "non-functional", "NFR");
                     break;
                 case 2: // Manage functional requirements
-                    ManageRequirements(project.GetFRequirements, project.AddFRequirement, project.UpdateFRequirementByID,
+                    ManageRequirements(project.GetFRequirements(), project.AddFRequirement, project.UpdateFRequirementByID,
                         project.RemoveFRequirementByID, "functional", "FR");
                     break;
                 case 3: // Return to Main Menu
@@ -455,7 +455,7 @@ public class UserInterface
         while (true)
         {
             Console.WriteLine("-------------------------");
-            Console.WriteLine("[Project Effort Tracking and Progress]")
+            Console.WriteLine("[Project Effort Tracking and Progress]");
             Console.WriteLine("1. Log actual person-hours for a requirement");
             Console.WriteLine("2. Enter estimated person-hours for a requirement");
             Console.WriteLine("3. View actual effort totals for each requirement");
