@@ -508,7 +508,7 @@ public class UserInterface
         if (requirement == null) return;
 
         Console.WriteLine("Enter the date the work was done (yyyy-mm-dd).");
-        Console.Write("For a weekly entry, enter the first day of the week: ");
+        Console.Write("For a weekly entry, enter the Sunday at the beginning of the week: ");
         string date = Console.ReadLine() ?? "";
 
         if (string.IsNullOrWhiteSpace(date))
@@ -530,18 +530,13 @@ public class UserInterface
         int hoursProjMan = ReadHourEntry("Project Management: ");
         int hoursUncategorized = ReadHourEntry("Uncategorized: ");
         
-        requirement.AddEffortEntry(hoursReqsAnalysis, hoursDesigning, hoursCoding, hoursTesting, hoursProjMan, hoursUncategorized);
-        EffortEntry[] entries = requirement.GetEffortEntries();
-
-        bool dateSet = entries[entries.Length - 1].SetDatestamp(date);
-
+        bool dateSet = requirement.AddEffortEntry(date, hoursReqsAnalysis, hoursDesigning, hoursCoding, hoursTesting, hoursProjMan, hoursUncategorized);
         if (dateSet)
         {
             Console.WriteLine("Effort entry has been added.");
         }
         else
         {
-            requirement.RemoveNewestEntry();
             Console.WriteLine("Invalid date. Effort entry was not added.");
         }
     }

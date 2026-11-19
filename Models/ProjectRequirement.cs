@@ -44,7 +44,7 @@ public class ProjectRequirement
     }
     
     /// <summary>
-    /// AddEffortEntry: Creates and adds a new effort entry for the requirement. 
+    /// AddEffortEntry: Creates and adds a new effort entry for the requirement.
     /// </summary>
     /// <param name="hoursReqsAnalysis">Hours spent on requirements analysis.</param>
     /// <param name="hoursDesigning">Hours spent designing.</param>
@@ -52,9 +52,14 @@ public class ProjectRequirement
     /// <param name="hoursTesting">Hours spent testing.</param>
     /// <param name="hoursProjManagement">Hours spent on project management.</param>
     /// <param name="hoursUncategorized">Hours spent on other tasks.</param>
-    public void AddEffortEntry(int hoursReqsAnalysis, int hoursDesigning, int hoursCoding, int hoursTesting, int hoursProjManagement, int hoursUncategorized)
+    /// <returns>true on success, false otherwise.</returns>
+    public bool AddEffortEntry(string date, int hoursReqsAnalysis, int hoursDesigning, int hoursCoding, int hoursTesting, int hoursProjManagement, int hoursUncategorized)
     {
         EffortEntry entry = new EffortEntry();
+        if (!entry.SetDatestamp(date))
+        {
+            return false;
+        }
         
         entry.SetEffortByCategory("Reqs Analysis", hoursReqsAnalysis);
         entry.SetEffortByCategory("Designing", hoursDesigning);
@@ -64,17 +69,7 @@ public class ProjectRequirement
         entry.SetEffortByCategory("Uncategorized", hoursUncategorized);
 
         effortEntries.Add(entry);
-    }
-    
-    /// <summary>
-    /// RemoveNewestEntry: Removes the most recently added effort entry.
-    /// </summary>
-    public void RemoveNewestEntry()
-    {
-        if (effortEntries.Count > 0) 
-        {
-            effortEntries.RemoveAt(effortEntries.Count - 1);
-        }
+        return true;
     }
     
     /// <summary>
