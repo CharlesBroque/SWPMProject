@@ -200,6 +200,12 @@ public class UserInterface
         Console.WriteLine($"Enter the name of the {title} to remove: ");
         string name = Console.ReadLine() ?? "";
 
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            Console.WriteLine("Name cannot be blank!");
+            return;
+        }
+
         if (remove(name))
         {
             Console.WriteLine($"{title} {name} removed.");
