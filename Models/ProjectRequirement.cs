@@ -52,7 +52,7 @@ public class ProjectRequirement
     /// <param name="hoursTesting">Hours spent testing.</param>
     /// <param name="hoursProjManagement">Hours spent on project management.</param>
     /// <param name="hoursUncategorized">Hours spent on other tasks.</param>
-    /// <returns>true on success, false otherwise.</returns>
+    /// <returns>true on success, false if date is invalid.</returns>
     public bool AddEffortEntry(string date, int hoursReqsAnalysis, int hoursDesigning, int hoursCoding, int hoursTesting, int hoursProjManagement, int hoursUncategorized)
     {
         EffortEntry entry = new EffortEntry();
@@ -69,6 +69,7 @@ public class ProjectRequirement
         entry.SetEffortByCategory("Uncategorized", hoursUncategorized);
 
         effortEntries.Add(entry);
+        effortEntries.Sort((e1, e2) => e1.GetDatestamp().CompareTo(e2.GetDatestamp())); // sorts effort entry list by date
         return true;
     }
     
@@ -103,6 +104,64 @@ public class ProjectRequirement
             }
         }
         return totals;
+    }
+
+    /// <summary>
+    /// SplitToTimeBuckets: Sorts effort entries into buckets based on their date.
+    /// Buckets have the form of dummy ProjectRequirement objects so that totalEffort()
+    /// (and thereby UserInterface.PrintRequirementActualEffort()) can be called on them easily.
+    /// </summary>
+    /// <param name="weekly">Whether to use weekly bucketing or not.</param>
+    /// <returns>An array of dummy ProjectRequirement objects where each element has effort entries restricted to the bucket interval.</returns>
+    public ProjectRequirement[] SplitToTimeBuckets(bool weekly=false)
+    {
+        // start with dictionary to enforce uniqueness
+        Dictionary<DateOnly, List<EffortEntry>> buckets_dict = [];
+        foreach(EffortEntry entry in effortEntries)
+        {
+            DateOnly date_key = weekly ? entry.GetWeekstamp() : entry.GetDatestamp();
+            if (buckets_dict.ContainsKey(date_key)) {
+                buckets_dict[date_key].Add(entry);
+            }
+            else
+            {
+                buckets_dict[date_key] = [];
+                buckets_dict[date_key].Add(entry);
+            }
+        }
+        
+        // convert to list of tuples, static-ify internal lists
+        List<(DateOnly, EffortEntry[])> buckets_list = [];
+        foreach(KeyValuePair<DateOnly, List<EffortEntry>> kv in buckets_dict)
+        {
+            if (weekly) kv.Value.Sort((e1, e2) => e1.GetDatestamp().CompareTo(e2.GetDatestamp())); // sort entries by date if they're grouped by week
+            buckets_list.Add((kv.Key, kv.Value.ToArray()));
+        }
+
+        // sort buckets by date just in case being put in a dictionary scrambled them
+        buckets_list.Sort((t1, t2) => t1.Item1.CompareTo(t2.Item1));
+
+        List<ProjectRequirement> dummy_reqs = [];
+        foreach((DateOnly, EffortEntry[]) t in buckets_list)
+        {
+            ProjectRequirement dummy = new(id: -999999, isfunc: this.isFunctional, desc: "dummy requirement, do not print!!!");
+            foreach (EffortEntry entry in t.Item2)
+            {
+                // Reqs Analysis, Designing, Coding, Testing, Proj Management, Uncategorized
+                dummy.AddEffortEntry(
+                    t.Item1.ToString(format:"yyyy-MM-dd"),
+                    entry.GetEffortByCategory("Reqs Analysis"),
+                    entry.GetEffortByCategory("Designing"),
+                    entry.GetEffortByCategory("Coding"),
+                    entry.GetEffortByCategory("Testing"),
+                    entry.GetEffortByCategory("Proj Management"),
+                    entry.GetEffortByCategory("Uncategorized")
+                    );
+            }
+            dummy_reqs.Add(dummy);
+        }
+
+        return dummy_reqs.ToArray();
     }
     
     //update effort:
