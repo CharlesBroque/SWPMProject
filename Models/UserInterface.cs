@@ -501,7 +501,7 @@ public class UserInterface
         ProjectRequirement? requirement = SelectRequirement(project);
         if (requirement == null) return;
 
-        Console.WriteLine("Enter the date the work was done (yyy-mm-dd).");
+        Console.WriteLine("Enter the date the work was done (yyyy-mm-dd).");
         Console.Write("For a weekly entry, enter the first day of the week: ");
         string date = Console.ReadLine() ?? "";
 
