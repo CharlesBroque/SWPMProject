@@ -87,6 +87,27 @@ public class ProjectRequirement
         }
         return false;
     }
+
+    /// <summary>
+    /// UpdateEffortEntryByIndex: Updates an effort entry by index. All parameters except the index are optional.
+    /// </summary>
+    /// <returns>True if the update succeeds and false if it doesn't.</returns>
+    public bool UpdateEffortEntryByIndex(int index, int? hoursReqsAnalysis=null, int? hoursDesigning=null, int? hoursCoding=null, int? hoursTesting=null, int? hoursProjManagement=null, int? hoursUncategorized=null)
+    {
+        if (index >= 0 && index < effortEntries.Count)
+        {
+            EffortEntry entry = effortEntries[index];
+            // categories: Reqs Analysis, Designing, Coding, Testing, Proj Management, Uncategorized
+            entry.SetEffortByCategory("Reqs Analysis", hoursReqsAnalysis ?? entry.GetEffortByCategory("Reqs Analysis"));
+            entry.SetEffortByCategory("Reqs Analysis", hoursDesigning ?? entry.GetEffortByCategory("Designing"));
+            entry.SetEffortByCategory("Reqs Analysis", hoursCoding ?? entry.GetEffortByCategory("Coding"));
+            entry.SetEffortByCategory("Reqs Analysis", hoursTesting ?? entry.GetEffortByCategory("Testing"));
+            entry.SetEffortByCategory("Reqs Analysis", hoursProjManagement ?? entry.GetEffortByCategory("Proj Management"));
+            entry.SetEffortByCategory("Reqs Analysis", hoursUncategorized ?? entry.GetEffortByCategory("Uncategorized"));
+            return true;
+        }
+        return false;
+    }
     
     /// <summary>
     /// totalEffort: Calculates the total hours recorded  in each effort category
@@ -163,8 +184,6 @@ public class ProjectRequirement
 
         return dummy_reqs.ToArray();
     }
-    
-    //update effort:
     
     // get total no. hours for each requirement:
     
