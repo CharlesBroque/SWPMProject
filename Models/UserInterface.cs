@@ -577,7 +577,7 @@ public class UserInterface
         Console.WriteLine("Functional requirements: ");
         if (project.GetFRequirements().Count == 0)
         {
-            Console.WriteLine("(none)");
+            Console.WriteLine("     (none)");
         }
         foreach (ProjectRequirement requirement in project.GetFRequirements())
         {
@@ -587,7 +587,7 @@ public class UserInterface
         Console.WriteLine("Non-functional requirements: ");
         if (project.GetNFRequirements().Count == 0)
         {
-            Console.WriteLine("(none)");
+            Console.WriteLine("     (none)");
         }
 
         foreach (ProjectRequirement requirement in project.GetNFRequirements())
@@ -598,17 +598,17 @@ public class UserInterface
 
     private static void PrintRequirementActualEffort(ProjectRequirement requirement)
     {
-        Console.WriteLine(requirement);
+        Console.WriteLine("     " + requirement);
 
         Dictionary<string, int> actual = requirement.totalEffort();
         int total = 0;
         foreach (KeyValuePair<string, int> entry in actual)
         {
-            Console.WriteLine($"{entry.Key}: {entry.Value} hours");
+            Console.WriteLine($"          {entry.Key}: {entry.Value} hours");
             total += entry.Value;
         }
 
-        Console.WriteLine($"Total: {total} hours");
+        Console.WriteLine($"     Total: {total} hours");
     }
 
     private static void ViewProjectEffort(Project project)
@@ -618,7 +618,7 @@ public class UserInterface
         Console.WriteLine("Project-wide actual effort: ");
         foreach (KeyValuePair<string, int> entry in projectTotals)
         {
-            Console.WriteLine($"{entry.Key}: {entry.Value}  hours");
+            Console.WriteLine($"     {entry.Key}: {entry.Value} hours");
             total += entry.Value;
         }
 
@@ -673,7 +673,7 @@ public class UserInterface
         }
         Console.WriteLine("-------------------------");
         Console.WriteLine($"Estimated total: {estimatedTotal} hours");
-        Console.WriteLine($"Actual total: {estimatedTotal} hours");
+        Console.WriteLine($"Actual total: {actualTotal} hours");
         Console.WriteLine($"Difference: {differenceTotal:+#;-#;0} hours");
     }
 
