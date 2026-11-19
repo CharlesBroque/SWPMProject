@@ -347,8 +347,8 @@ public class UserInterface
         {
             Console.WriteLine("-------------------------");
             Console.WriteLine("[Project Requirements Menu]");
-            Console.WriteLine("1. Manage nonfunctional requirements");
-            Console.WriteLine("2. Manage functional requirements");
+            Console.WriteLine("1. Manage functional requirements");
+            Console.WriteLine("2. Manage nonfunctional requirements");
             Console.WriteLine("3. Return to Main Menu");
             Console.WriteLine("-------------------------");
 
@@ -356,13 +356,13 @@ public class UserInterface
 
             switch (choice)
             {
-                case 1: // Manage nonfunctional requirements
-                    ManageRequirements(project.GetNFRequirements(), project.AddNFRequirement,
-                        project.UpdateNFRequirementByID, project.RemoveNFRequirementByID, "non-functional", "NFR");
-                    break;
-                case 2: // Manage functional requirements
+                case 1: // Manage functional requirements
                     ManageRequirements(project.GetFRequirements(), project.AddFRequirement, project.UpdateFRequirementByID,
                         project.RemoveFRequirementByID, "functional", "FR");
+                    break;
+                case 2: // Manage nonfunctional requirements
+                    ManageRequirements(project.GetNFRequirements(), project.AddNFRequirement,
+                        project.UpdateNFRequirementByID, project.RemoveNFRequirementByID, "non-functional", "NFR");
                     break;
                 case 3: // Return to Main Menu
                     Console.WriteLine("Returning to Main Menu...");
