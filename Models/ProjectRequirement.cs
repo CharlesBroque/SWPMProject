@@ -99,11 +99,11 @@ public class ProjectRequirement
             EffortEntry entry = effortEntries[index];
             // categories: Reqs Analysis, Designing, Coding, Testing, Proj Management, Uncategorized
             entry.SetEffortByCategory("Reqs Analysis", hoursReqsAnalysis ?? entry.GetEffortByCategory("Reqs Analysis"));
-            entry.SetEffortByCategory("Reqs Analysis", hoursDesigning ?? entry.GetEffortByCategory("Designing"));
-            entry.SetEffortByCategory("Reqs Analysis", hoursCoding ?? entry.GetEffortByCategory("Coding"));
-            entry.SetEffortByCategory("Reqs Analysis", hoursTesting ?? entry.GetEffortByCategory("Testing"));
-            entry.SetEffortByCategory("Reqs Analysis", hoursProjManagement ?? entry.GetEffortByCategory("Proj Management"));
-            entry.SetEffortByCategory("Reqs Analysis", hoursUncategorized ?? entry.GetEffortByCategory("Uncategorized"));
+            entry.SetEffortByCategory("Designing", hoursDesigning ?? entry.GetEffortByCategory("Designing"));
+            entry.SetEffortByCategory("Coding", hoursCoding ?? entry.GetEffortByCategory("Coding"));
+            entry.SetEffortByCategory("Testing", hoursTesting ?? entry.GetEffortByCategory("Testing"));
+            entry.SetEffortByCategory("Proj Management", hoursProjManagement ?? entry.GetEffortByCategory("Proj Management"));
+            entry.SetEffortByCategory("Uncategorized", hoursUncategorized ?? entry.GetEffortByCategory("Uncategorized"));
             return true;
         }
         return false;

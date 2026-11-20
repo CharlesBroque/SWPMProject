@@ -468,7 +468,9 @@ public class UserInterface
             Console.WriteLine("4. View project-wide actual effort totals");
             Console.WriteLine("5. Compare actual and estimated effort for a requirement");
             Console.WriteLine("6. Compare project-wide actual and estimated effort");
-            Console.WriteLine("7. Return to Main Menu");
+            Console.WriteLine("7. Manage individual effort entries");
+            Console.WriteLine("8. View daily/weekly effort reports");
+            Console.WriteLine("9. Return to Main Menu");
             Console.WriteLine("-------------------------");
 
             int choice = ReadInt("Select an option: ");
@@ -492,7 +494,13 @@ public class UserInterface
                 case 6: // Compare project-wide actual and estimated effort
                     CompareProjectEffort(project);
                     break;
-                case 7: // Return to Main Menu
+                case 7: // Manage individual effort entries
+                    ManageRequirementEffortEntries(project);
+                    break;
+                case 8: // View daily/weekly effort reports
+                    ViewEffortReports(project);
+                    break;
+                case 9: // Return to Main Menu
                     Console.WriteLine("Returning to Main Menu...");
                     return;
                 default: // Invalid option
@@ -709,6 +717,168 @@ public class UserInterface
         Console.WriteLine($"Actual total: {actualTotal} hours");
         Console.WriteLine($"Difference: {differenceTotal:+#;-#;0} hours");
     }
+
+    private static void ManageRequirementEffortEntries(Project project)
+    {
+        ProjectRequirement? requirement = SelectRequirement(project);
+        if (requirement == null) return;
+
+        while (true)
+        {
+            Console.WriteLine("-------------------------");
+            Console.WriteLine($"[Effort Entries for {requirement}]");
+            PrintEffortEntries(requirement);
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("1. Update an effort entry");
+            Console.WriteLine("2. Remove an effort entry");
+            Console.WriteLine("3. Return to Project Effort and Tracking Progress Menu");
+            Console.WriteLine("-------------------------");
+
+            int subChoice = ReadInt("Select an option: ");
+            switch (subChoice)
+            {
+                case 1: // Update an effort entry
+                    UpdateRequirementEffortEntry(requirement);
+                    break;
+                case 2: // Remove an effort entry
+                    RemoveRequirementEffortEntry(requirement);
+                    break;
+                case 3: // Return to Project Effort and Progress Menu
+                    Console.WriteLine("Returning to Project Effort and Progress Menu");
+                    return;
+                default: // Invalid option
+                    Console.WriteLine("Invalid choice. Please select a valid option.");
+                    break;
+            }
+        }
+    }
+
+    private static void UpdateRequirementEffortEntry(ProjectRequirement requirement)
+    {
+        EffortEntry[] entries = requirement.GetEffortEntries();
+        if (entries.Length == 0)
+        {
+            Console.WriteLine("There are no effort entries to update.");
+            return;
+        }
+        PrintEffortEntries(requirement);
+        
+        int entryNum = ReadInt("Enter the entry number you want to update: ");
+        if (entryNum < 1 || entryNum > entries.Length)
+        {
+            Console.WriteLine("Invalid entry number!");
+            return;
+        }
+
+        int index = entryNum - 1;
+        EffortEntry entry = entries[index];
+        
+        Console.WriteLine("-------------------------");
+        Console.WriteLine($"Updating entry dated {entry.GetDatestamp()}");
+        Console.WriteLine("Entry the replacement hours for each category.");
+        Console.WriteLine("-------------------------");
+        Console.WriteLine("Current hrs: ");
+        Dictionary<string, int> currentHrs = entry.GetEffortHours();
+        foreach (KeyValuePair<string, int> category in currentHrs)
+        {
+            Console.WriteLine($"{category.Key}: {category.Value}");
+        }
+        Console.WriteLine("-------------------------");
+        int hoursReqsAnalysis = ReadHourEntry("Requirements Analysis: ");
+        int hoursDesigning = ReadHourEntry("Designing: ");
+        int hoursCoding = ReadHourEntry("Coding: ");
+        int hoursTesting = ReadHourEntry("Testing: ");
+        int hoursProjManagement = ReadHourEntry("ProjManagement: ");
+        int hoursUncategorized = ReadHourEntry("Uncategorized: ");
+        bool updated = requirement.UpdateEffortEntryByIndex(index, hoursReqsAnalysis, hoursDesigning, hoursCoding, hoursTesting, hoursProjManagement, hoursUncategorized);
+
+        if (updated)
+        {
+            Console.WriteLine("Effort entry updated.");
+        }
+        else
+        {
+            Console.WriteLine("Could not update effort entry.");
+        }
+    }
+
+    private static void RemoveRequirementEffortEntry(ProjectRequirement requirement)
+    {
+        EffortEntry[] entries = requirement.GetEffortEntries();
+        if (entries.Length == 0)
+        {
+            Console.WriteLine("There are no effort entries to remove.");
+            return;
+        }
+
+        PrintEffortEntries(requirement);
+        
+        int entryNum = ReadInt("Enter the entry number you want to remove: ");
+        if (entryNum < 1 || entryNum > entries.Length)
+        {
+            Console.WriteLine("Invalid entry number!");
+            return;
+        }
+
+        int index = entryNum - 1;
+
+        Console.WriteLine($"You selected the entry dated {entries[index].GetDatestamp()}.");
+        Console.WriteLine("Are you sure you want to remove this entry? (y/n): ");
+        string confirmation = Console.ReadLine() ?? "";
+
+        if (confirmation.Equals("y", StringComparison.OrdinalIgnoreCase))
+        {
+            if (requirement.RemoveEntryByIndex(index))
+            {
+                Console.WriteLine("Effort entry removed.");
+            }
+            else
+            {
+                Console.WriteLine("Could not remove effort entry.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Cancelled.");
+        }
+
+
+    }
+
+    private static void ViewEffortReports(Project project)
+    {
+        while (true)
+        {
+            ProjectRequirement? requirement = SelectRequirement(project);
+            if (requirement == null) return;
+
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("[Effort Report]");
+            Console.WriteLine("1. Daily report");
+            Console.WriteLine("2. Weekly report");
+            Console.WriteLine("3. Return to Project Effort and Tracking Progress Menu");
+            Console.WriteLine("-------------------------");
+
+            int subChoice = ReadInt("Select an option: ");
+
+            switch (subChoice)
+            {
+                case 1: // Daily report
+                    PrintEffortReport(requirement, false);
+                    break;
+                case 2: // Weekly report
+                    PrintEffortReport(requirement, true);
+                    break;
+                case 3: // Return to Project Effort and Progress Menu
+                    Console.WriteLine("Returning to Project Effort and Progress Menu");
+                    return;
+                default: // Invalid option
+                    Console.WriteLine("Invalid choice. Please select a valid option.");
+                    break;
+            }
+        }
+    }
+    
     
     private static ProjectRequirement? SelectRequirement(Project project)
     {
@@ -836,5 +1006,79 @@ public class UserInterface
         {
             Console.WriteLine(nfReq.ToString());
         }
+    }
+
+    private static void PrintEffortEntries(ProjectRequirement requirement)
+    {
+        EffortEntry[] entries = requirement.GetEffortEntries();
+        if (entries.Length == 0)
+        {
+            Console.WriteLine("No effort entries found.");
+            return;
+        }
+
+        for (int i = 0; i < entries.Length; i++)
+        {
+            EffortEntry entry = entries[i];
+            
+            Console.WriteLine("-------------------------");
+            Console.WriteLine($"Entry {i + 1}");
+            Console.WriteLine($"Date: {entry.GetDatestamp()}");
+
+            Dictionary<string, int> hours = entry.GetEffortHours();
+            int total = 0;
+            foreach (KeyValuePair<string, int> category in hours)
+            {
+                Console.WriteLine($"{category.Key}: {category.Value} hours");
+                total += category.Value;
+            }
+            Console.WriteLine($"Total: {total} hours");
+        }
+
+        Console.WriteLine("-------------------------");
+    }
+
+    private static void PrintEffortReport(ProjectRequirement requirement, bool weekly)
+    {
+        ProjectRequirement[] buckets = requirement.SplitToTimeBuckets(weekly);
+        if (buckets.Length == 0)
+        {
+            Console.WriteLine("No effort entries found.");
+            return;
+        }
+        
+        string reportType = weekly ? "Weekly" : "Daily";
+        Console.WriteLine("-------------------------");
+        Console.WriteLine($"{reportType} Effort report");
+        Console.WriteLine($"Requirement: {requirement}");
+        Console.WriteLine("-------------------------");
+
+        foreach (ProjectRequirement bucket in buckets)
+        {
+            EffortEntry[] entries = bucket.GetEffortEntries();
+            if (entries.Length == 0) continue;
+
+            DateOnly date = entries[0].GetDatestamp();
+            Console.WriteLine("-------------------------");
+
+            if (weekly)
+            {
+                Console.WriteLine($"Week start: {date}");
+            }
+            else
+            {
+                Console.WriteLine($"Date: {date}");
+            }
+
+            Dictionary<string, int> totals = bucket.totalEffort();
+            int bucketTotal = 0;
+            foreach (KeyValuePair<string, int> category in totals)
+            {
+                Console.WriteLine($"{category.Key}: {category.Value} hours");
+                bucketTotal += category.Value;
+            }
+            Console.WriteLine($"Total: {bucketTotal} hours");
+        }
+        Console.WriteLine("-------------------------");
     }
 }
