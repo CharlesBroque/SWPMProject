@@ -885,6 +885,7 @@ public class UserInterface
         Console.WriteLine("-------------------------");
         Console.WriteLine("1. Functional requirement");
         Console.WriteLine("2. Non-functional requirement");
+        Console.WriteLine("3. Cancel selection");
         Console.WriteLine("-------------------------");
         
         int typeChoice = ReadInt("Select the requirement type: ");
@@ -898,6 +899,9 @@ public class UserInterface
             case 2: // Non-functional req
                 requirements = project.GetNFRequirements();
                 break;
+            case 3: // return
+                Console.WriteLine("Returning to previous menu");
+                return null;
             default: // Invalid Input
                 Console.WriteLine("Invalid requirement type.");
                 return null;
